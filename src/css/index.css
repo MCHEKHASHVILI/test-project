@@ -1,7 +1,9 @@
+@import url('https://rsms.me/inter/inter.css');
 @import 'tailwindcss';
 @import './colors.css';
 
 @theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --breakpoint-3xl: 1920px;
   --container-3xl: 97.875rem;
 }
@@ -13,6 +15,12 @@
   /* Your custom 3xl logic */
   @variant 3xl {
     max-width: var(--container-3xl);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-grayscale-100;
   }
 }
 
