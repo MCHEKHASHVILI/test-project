@@ -1,5 +1,33 @@
 @import 'tailwindcss';
+
 @theme {
   --breakpoint-3xl: 1920px;
   --container-3xl: 97.875rem;
+}
+
+@utility wrapper {
+  margin-inline: auto;
+  width: 100%;
+
+  /* Map standard breakpoints */
+  @variant sm {
+    max-width: var(--container-sm);
+  }
+  @variant md {
+    max-width: var(--container-md);
+  }
+  @variant lg {
+    max-width: var(--container-lg);
+  }
+  @variant xl {
+    max-width: var(--container-xl);
+  }
+  @variant 2xl {
+    max-width: var(--container-2xl);
+  }
+
+  /* Your custom 3xl logic */
+  @variant 3xl {
+    max-width: var(--container-3xl);
+  }
 }
