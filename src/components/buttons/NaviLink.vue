@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 const props = defineProps<{
-    routeName: string;
-    title: string;
-    icon: string;
-    alt: string;
-}>();
-const iconUrl = new URL(props.icon).href;
+    routeName: string
+    title: string
+    icon: string
+    alt: string
+}>()
+const iconUrl = new URL(props.icon).href
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const iconUrl = new URL(props.icon).href;
             'mask-size': 'contain',
             '-webkit-mask-repeat': 'no-repeat',
             '-webkit-mask-position': 'center',
-            '-webkit-mask-size': 'contain'
+            '-webkit-mask-size': 'contain',
         }"></div>
         <span>{{ title }}</span>
     </RouterLink>

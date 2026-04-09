@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-    <h2>Catalog</h2>
+  <h2>Catalog</h2>
 </template>
