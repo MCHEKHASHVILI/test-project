@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import NaviLink from './buttons/NaviLink.vue'
-import StarsSVG from '@/assets/svg/Stars.svg?url'
 import Icon from './shared/Icon.vue';
+import AppLink from './shared/AppLink.vue';
 </script>
 <template>
   <header class="py-6 border-b border-grayscale-200 drop-shadow-[4%]">
     <nav class="wrapper flex justify-between items-center">
       <RouterLink :to="{ name: 'home' }"
-        class="flex items-center justify-center pt-4 pr-4.25 pb-4.25 pl-4 bg-brand-yellow-500 w-15 h-15 rounded-[14px]">
+        class="flex items-center justify-center bg-brand-yellow-500 w-15 h-15 rounded-[14px]">
         <Icon name="ApplicationLogo" width="29" height="30" viewBox="0 0 32 33" />
       </RouterLink>
       <section class="flex items-center gap-9">
         <ul class="flex">
           <li>
-            <NaviLink routeName="courses" title="Browse Courses" :icon="StarsSVG" alt="Browse Courses" />
+            <AppLink :to="{ name: 'courses' }"
+              class="w-full group flex items-center gap-2 p-3.75 rounded-lg text-xl font-medium text-grayscale-600 hover:text-brand-yellow-500 transition-colors">
+              <Icon name="Stars" width="21" height="25" viewBox="0 0 26 26"
+                class="[&_path]:stroke-grayscale-600! group-hover:[&_path]:stroke-brand-yellow-500!" />
+              <span>Browse Courses</span>
+            </AppLink>
           </li>
         </ul>
         <ul class="flex gap-3.75">
