@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import apiClient from '@/api/apiClient';
 import MainSlider from '@/components/sliders/MainSlider.vue'
+import CourseCard from '@/components/cards/CourseCard.vue';
 
 const featuredCourses = ref(null);
 
