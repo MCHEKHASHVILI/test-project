@@ -40,13 +40,12 @@ const toggleCheckbox = (event: any) => {
 
 </script>
 <template>
-    <label class="box-content inline-flex items-center cursor-pointer">
+    <label class="box-border inline-flex items-center cursor-pointer">
 
         <input type="checkbox" class="sr-only peer" :value="value" :checked="isChecked" @change="toggleCheckbox" />
 
-        <div class="w-fit flex flex-row space-x-2.5 items-center bg-grayscale-50 rounded-xl py-2 px-3" :class="{
-            'border border-brand-yellow-400': isChecked
-        }">
+        <div class="w-fit flex flex-row space-x-2.5 items-center bg-grayscale-50 rounded-xl py-2 px-3 border "
+            :class="[isChecked ? 'border-brand-yellow-400' : 'border-transparent']">
             <Icon v-if="'icon' in data" :name="data.icon" />
             <div v-if="'avatar' in data" class="w-7.5 h-7.5 rounded-sm overflow-hidden">
                 <img :src="data.avatar" class="w-full h-full rounded-sm object-cover" />
