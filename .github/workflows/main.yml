@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main  # Set this to your default branch
-
+  workflow_dispatch: # This line adds the manual button
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
