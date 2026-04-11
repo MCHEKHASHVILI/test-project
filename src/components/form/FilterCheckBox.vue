@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import Icon from '../shared/Icon.vue'
+
+interface Category {
+    id: number,
+    name: string,
+    icon: string
+}
+interface Topic {
+    id: number,
+    name: string,
+    categoryId: number
+}
+interface Instructor {
+    id: number,
+    name: string,
+    avatar: string
+}
+
+const props = defineProps<{
+    data: Category | Topic | Instructor,
+    modelValue: Array<number>,
+    value: number
+}>()
+
+const isChecked = computed<boolean>(() => props.modelValue.includes(props.value));
+
+const emit = defineEmits(['update:modelValue'])
+
+const toggleCheckbox = (event: any) => {
+    let updatedArray = [...props.modelValue]
+    if (event.target.checked) {
+        updatedArray.push(props.value)
+    } else {
+        updatedArray = updatedArray.filter(item => item !== props.value)
+    }
+    emit('update:modelValue', updatedArray)
+};
+
+</script>
+<template>
+    <label class="box-content inline-flex items-center cursor-pointer">
+
+        <input type="checkbox" class="sr-only peer" :value="value" :checked="isChecked" @change="toggleCheckbox" />
+
+        <div class="w-fit flex flex-row space-x-2.5 items-center bg-grayscale-50 rounded-xl py-2 px-3" :class="{
+            'border border-brand-yellow-400': isChecked
+        }">
+            <Icon v-if="'icon' in data" :name="data.icon" />
+            <div v-if="'avatar' in data" class="w-7.5 h-7.5 rounded-sm overflow-hidden">
+                <img :src="data.avatar" class="w-full h-full rounded-sm object-cover" />
+            </div>
+            <span>{{ data.name }}</span>
+        </div>
+    </label>
+</template>
