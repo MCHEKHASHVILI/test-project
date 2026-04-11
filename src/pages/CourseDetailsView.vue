@@ -1,5 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
+
+</script>
 
 <template>
-  <h2>Course Details</h2>
+  <RouterBreadCrumbs />
 </template>

@@ -1,5 +1,7 @@
-<script setup></script>
+<script setup>
+import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue';
+</script>
 
 <template>
-  <h2>Catalog</h2>
+  <RouterBreadCrumbs />
 </template>
