@@ -1,38 +1,13 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue';
-import { computed } from 'vue';
+import { defineAsyncComponent, computed, type Component } from 'vue';
 
 const props = defineProps({
-    name: {
-        type: String,
-        required: true,
-    },
-    class: {
-        type: String,
-        required: false,
-        default: null
-    },
-    width: {
-        type: [String, Number],
-        required: false,
-        default: null
-    },
-    height: {
-        type: [String, Number],
-        required: false,
-        default: null
-    },
-
-    viewBox: {
-        type: String,
-        required: false,
-        default: null
-    },
-    fill: {
-        type: String,
-        required: false,
-        default: null
-    }
+    name: { type: String, required: true },
+    class: { type: String, default: null },
+    width: { type: [String, Number], default: null },
+    height: { type: [String, Number], default: null },
+    viewBox: { type: String, default: null },
+    fill: { type: String, default: null }
 });
 
 const attributes = computed(() => {
@@ -45,9 +20,17 @@ const attributes = computed(() => {
     return attrs;
 });
 
-const icon = defineAsyncComponent(() =>
-    import(`/src/assets/svg/${props.name}.svg`)
-);
+// ✅ Vite resolves this glob statically at build time
+const modules = import.meta.glob('/src/assets/svg/*.svg', {
+    query: '?component',
+    import: 'default',
+});
+
+const icon = defineAsyncComponent(() => {
+    const loader = modules[`/src/assets/svg/${props.name}.svg`];
+    if (!loader) return Promise.reject(new Error(`SVG not found: ${props.name}`));
+    return loader() as Promise<Component>;
+});
 </script>
 
 <template>
