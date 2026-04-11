@@ -7,17 +7,22 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-    tailwindcss(),
-    svgLoader(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+export default defineConfig(({ command, mode }) => {
+
+  const isProduction = command === 'build'
+
+  return {
+    plugins: [
+      vue(),
+      vueDevTools(),
+      tailwindcss(),
+      svgLoader(),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      },
     },
-  },
-  base: '/test-project/'
+    base: isProduction ? '/test-project/' : '/',
+  }
 })

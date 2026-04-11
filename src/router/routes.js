@@ -1,6 +1,7 @@
 import HomeView from '@/pages/HomeView.vue'
 import CoursesView from '@/pages/CoursesView.vue'
 import CourseDetailsView from '@/pages/CourseDetailsView.vue'
+import NotFound from '@/pages/NotFound.vue'
 import { h } from 'vue'
 import { RouterView } from 'vue-router'
 
@@ -34,7 +35,12 @@ const routes = [
         ]
       }
     ]
-  }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
+  },
 ]
 
 export default routes
