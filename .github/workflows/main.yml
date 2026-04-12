@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Set this to your default branch
+      - master # Set this to your default branch
   workflow_dispatch: # This line adds the manual button
 jobs:
   build-and-deploy:
@@ -21,4 +21,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # The folder Vite creates after building
+          publish_dir: ./dist # The folder Vite creates after building
