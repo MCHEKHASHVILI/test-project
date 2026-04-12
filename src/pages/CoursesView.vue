@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
 import Icon from '@/components/shared/Icon.vue'
-import FeaturedCourseCard from '@/components/cards/FeaturedCourseCard.vue'
+import BrowseCourseCard from '@/components/cards/BrowseCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
 import Pagination from '@/components/shared/Pagination.vue'
@@ -47,8 +47,8 @@ const sortOptions = ref([
   }
 ])
 
-const sort = ref<string | null>(null)
-const page = ref<number>(1)
+const sort = defineModel<string>()
+const page = defineModel<number>('page', { default: 1 })
 
 function clearFilters(): void {
   (Object.keys(filters.value) as Array<keyof typeof filters.value>).forEach(key => {
@@ -157,7 +157,7 @@ onMounted(() => {
       </aside>
       <section class="w-291.75 flex flex-col gap-8">
         <div v-if="courses" class="grid grid-cols-3 gap-6">
-          <FeaturedCourseCard v-for="item in courses.data" :course="item" />
+          <BrowseCourseCard v-for="item in courses.data" :course="item" />
         </div>
         <div class="flex mx-auto">
           <Pagination v-if="courses?.data" v-model="page" :last-page="courses.meta.lastPage"
