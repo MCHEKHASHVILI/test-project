@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node gen-types.js && vite",
-    "build": "node gen-types.js && vue-tsc && vite build && cp dist/index.html dist/404.html",
+    "build": "node gen-types.js && vite build && cp dist/index.html dist/404.html",
+    "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier --write --experimental-cli src/"
   },
