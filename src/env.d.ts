@@ -9,8 +9,6 @@ declare module '*.vue' {
 declare module '*.css'
 
 declare module '@splidejs/splide/css'
-
-// Add this:
 declare module '@splidejs/vue-splide' {
   import type { DefineComponent, Plugin } from 'vue'
   export const Splide: DefineComponent<any, any, any>

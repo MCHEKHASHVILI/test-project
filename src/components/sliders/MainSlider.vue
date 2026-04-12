@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-// @ts-ignore
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide'
 import '@splidejs/splide/css';
 import ArrowLeftSVGUrl from '@/assets/svg/ArrowLeft.svg?url'
