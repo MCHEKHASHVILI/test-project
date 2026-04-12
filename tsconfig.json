@@ -7,8 +7,7 @@
        but it's better to just use absolute paths in the 'paths' key */
     "paths": {
       "@/*": ["./src/*"],
-      "@types": ["./src/types/index.ts"],
-      "@splidejs/vue-splide": ["./node_modules/@splidejs/vue-splide/src/js/index.ts"]
+      "@types": ["./src/types/index.ts"]
     },
     "allowJs": true,
     "strict": true,
