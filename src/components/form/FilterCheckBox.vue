@@ -2,21 +2,7 @@
 import { computed } from 'vue'
 import Icon from '../shared/Icon.vue'
 
-interface Category {
-    id: number,
-    name: string,
-    icon: string
-}
-interface Topic {
-    id: number,
-    name: string,
-    categoryId: number
-}
-interface Instructor {
-    id: number,
-    name: string,
-    avatar: string
-}
+import { Category, Topic, Instructor } from "@types"
 
 const props = defineProps<{
     data: Category | Topic | Instructor,

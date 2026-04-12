@@ -1,16 +1,7 @@
 <script setup lang="ts">
-import Icon from '@/components/shared/Icon.vue';
-interface Course {
-    title: string;
-    image: string;
-    description: string;
-    instructor: {
-        name: string;
-    },
-    avgRating: number;
-    basePrice: number;
-}
-defineProps<{ course: Course }>();
+import Icon from '@/components/shared/Icon.vue'
+import { Course } from '@/types'
+defineProps<{ course: Course }>()
 </script>
 <template>
     <div class="w-full bg-grayscale-50 rounded-lg border-b border-grayscale-100 p-5">

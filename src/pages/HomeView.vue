@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import apiClient from '@/api/apiClient';
+import { ref, onMounted } from 'vue'
+import apiClient from '@/api/apiClient'
 import MainSlider from '@/components/sliders/MainSlider.vue'
-import CourseCard from '@/components/cards/CourseCard.vue';
+import FeaturedCourseCard from '@/components/cards/FeaturedCourseCard.vue'
+import { Course } from '@types'
 
-const featuredCourses = ref(null);
+const featuredCourses = ref<Course[] | null>(null)
 
 onMounted(async () => {
   try {
-    const response = await apiClient.get('courses/featured');
-    featuredCourses.value = response.data.data;
+    const response = await apiClient.get('courses/featured')
+    featuredCourses.value = response.data.data
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching data:', error)
   }
-});
+})
 
 </script>
 <template>
@@ -25,7 +26,7 @@ onMounted(async () => {
       </h2>
     </div>
     <div class="flex flex-row justify-between gap-6">
-      <CourseCard v-for="course in featuredCourses" :key="course.id" :course="course" />
+      <FeaturedCourseCard v-for="course in featuredCourses" :key="course.id" :course="course" />
     </div>
   </section>
 </template>

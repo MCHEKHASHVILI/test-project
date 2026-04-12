@@ -31,15 +31,15 @@ const routes = [
             name: 'details',
             component: CourseDetailsView,
             meta: { breadcrumb: 'Development' },
-          }
-        ]
-      }
-    ]
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: NotFound
+    component: NotFound,
   },
 ]
 

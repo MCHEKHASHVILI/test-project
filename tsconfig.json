@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    /* Use 'ignoreDeprecations' if you want to keep baseUrl, 
+       but it's better to just use absolute paths in the 'paths' key */
+    "paths": {
+      "@/*": ["./src/*"],
+      "@types": ["./src/types/index.ts"]
+    },
+    "allowJs": true,
+    "strict": true,
+    "jsx": "preserve",
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"]
+}

@@ -1,27 +1,19 @@
 <script setup lang="ts">
 import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
 import Icon from '@/components/shared/Icon.vue'
-import CourseCard from '@/components/cards/CourseCard.vue'
+import FeaturedCourseCard from '@/components/cards/FeaturedCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
 import Pagination from '@/components/shared/Pagination.vue'
 import apiClient from '@/api/apiClient'
-import { ref, onMounted, computed, watch } from "vue"
-
-interface Courses {
-  data: Array<any>,
-  meta: {
-    currentPage: number,
-    lastPage: number,
-    perPage: number,
-    total: number
-  }
-}
+import { ref, type Ref, onMounted, computed, watch } from "vue"
+import { BrowseCoursesResponse } from '@types'
 
 const categories = ref(null);
 const topics = ref(null);
 const instructors = ref(null);
-const courses = ref<Courses | null>(null)
+
+const courses = ref<BrowseCoursesResponse | null>(null)
 
 const filters = ref({
   topics: [] as number[],
@@ -98,29 +90,20 @@ async function getCourses(params: Object | null = null) {
   }
 }
 
-onMounted(async () => {
+async function getResource(endpoint: string, resourse: Ref): Promise<void> {
   try {
-    const response = await apiClient.get('categories');
-    categories.value = response.data.data;
+    const response = await apiClient.get(endpoint);
+    resourse.value = response.data.data;
   } catch (error) {
     console.error('Error fetching data:', error);
   }
+}
 
-  try {
-    const response = await apiClient.get('topics');
-    topics.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-  try {
-    const response = await apiClient.get('instructors');
-    instructors.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-
-  await getCourses()
-
+onMounted(() => {
+  getResource('categories', categories)
+  getResource('topics', topics)
+  getResource('instructors', instructors)
+  getCourses()
 });
 </script>
 
@@ -139,7 +122,7 @@ onMounted(async () => {
       </div>
       <div v-if="courses" class="w-291.75 flex flex-row items-center justify-between">
         <span class="text-grayscale-500 font-medium">Showing {{ courses.data.length }} out of {{ courses.meta.total
-          }}</span>
+        }}</span>
         <SelectSort v-model="sort" :options="sortOptions" />
       </div>
     </div>
@@ -174,7 +157,7 @@ onMounted(async () => {
       </aside>
       <section class="w-291.75 flex flex-col gap-8">
         <div v-if="courses" class="grid grid-cols-3 gap-6">
-          <CourseCard v-for="item in courses.data" :course="item" />
+          <FeaturedCourseCard v-for="item in courses.data" :course="item" />
         </div>
         <div class="flex mx-auto">
           <Pagination v-if="courses?.data" v-model="page" :last-page="courses.meta.lastPage"

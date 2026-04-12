@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && cp dist/index.html dist/404.html",
+    "dev": "node gen-types.js && vite",
+    "build": "node gen-types.js && vue-tsc && vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
     "format": "prettier --write --experimental-cli src/"
   },
@@ -20,12 +20,16 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
+    "@types/node": "^25.6.0",
     "@vitejs/plugin-vue": "^6.0.5",
+    "@vue/tsconfig": "^0.9.1",
     "prettier": "3.8.1",
     "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.2",
     "vite": "^8.0.3",
     "vite-plugin-vue-devtools": "^8.1.1",
-    "vite-svg-loader": "^5.1.1"
+    "vite-svg-loader": "^5.1.1",
+    "vue-tsc": "^3.2.6"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

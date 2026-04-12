@@ -20,7 +20,8 @@ export default defineConfig(({ command, mode }) => {
     ],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '@types': fileURLToPath(new URL('./src/types', import.meta.url))
       },
     },
     base: isProduction ? '/test-project/' : '/',
