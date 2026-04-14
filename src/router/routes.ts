@@ -1,6 +1,6 @@
-import HomeView from '@/pages/HomeView.vue'
-import CoursesView from '@/pages/CoursesView.vue'
-import CourseDetailsView from '@/pages/CourseDetailsView.vue'
+import Home from '@/pages/Home.vue'
+import Courses from '@/pages/Courses.vue'
+import Details from '@/pages/Details.vue'
 import NotFound from '@/pages/NotFound.vue'
 import { h } from 'vue'
 import { RouterView } from 'vue-router'
@@ -14,7 +14,7 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: HomeView,
+        component: Home,
       },
       {
         path: 'catalog',
@@ -24,12 +24,12 @@ const routes = [
           {
             path: '',
             name: 'courses',
-            component: CoursesView,
+            component: Courses,
           },
           {
             path: ':id',
             name: 'details',
-            component: CourseDetailsView,
+            component: Details,
             meta: { breadcrumb: 'Development' },
           },
         ],
