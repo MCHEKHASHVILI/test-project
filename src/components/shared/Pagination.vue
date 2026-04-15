@@ -1,35 +1,7 @@
-<template>
-    <nav aria-label="Pagination" class="flex items-center gap-1">
-        <PaginationBtn :disabled="modelValue === 1" aria-label="Previous page" @click="changePage(modelValue - 1)">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-        </PaginationBtn>
-
-        <template v-for="item in pages" :key="item">
-            <span v-if="item === '...'"
-                class="w-10 h-10 flex items-center justify-center text-sm text-indigo-500 select-none">
-                …
-            </span>
-            <PaginationBtn v-else :active="item === modelValue" :aria-label="`Page ${item}`"
-                :aria-current="item === modelValue ? 'page' : undefined" @click="changePage(item as number)">
-                {{ item }}
-            </PaginationBtn>
-        </template>
-
-        <PaginationBtn :disabled="modelValue === lastPage" aria-label="Next page" @click="changePage(modelValue + 1)">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
-        </PaginationBtn>
-    </nav>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import PaginationBtn from './PaginationBtn.vue';
+import BaseIcon from './BaseIcon.vue';
 const props = withDefaults(
     defineProps<{
         modelValue: number
@@ -75,3 +47,26 @@ const pages = computed<(number | '...')[]>(() => {
     return [1, '...', current, '...', total]
 })
 </script>
+
+<template>
+    <nav aria-label="Pagination" class="flex items-center gap-1">
+        <PaginationBtn :disabled="modelValue === 1" aria-label="Previous page" @click="changePage(modelValue - 1)">
+            <BaseIcon name="arrow-right" width="16" height="16" class="rotate-180" />
+        </PaginationBtn>
+
+        <template v-for="item in pages" :key="item">
+            <span v-if="item === '...'"
+                class="w-10 h-10 flex items-center justify-center text-sm text-indigo-500 select-none">
+                …
+            </span>
+            <PaginationBtn v-else :active="item === modelValue" :aria-label="`Page ${item}`"
+                :aria-current="item === modelValue ? 'page' : undefined" @click="changePage(item as number)">
+                {{ item }}
+            </PaginationBtn>
+        </template>
+
+        <PaginationBtn :disabled="modelValue === lastPage" aria-label="Next page" @click="changePage(modelValue + 1)">
+            <BaseIcon name="arrow-right" width="16" height="16" />
+        </PaginationBtn>
+    </nav>
+</template>

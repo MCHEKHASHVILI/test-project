@@ -4,3 +4,6 @@ export * from './Course';
 export * from './Instructor';
 export * from './SelectOption';
 export * from './Topic';
+export * from './UserAuthenticationForm';
+export * from './UserProfile';
+export * from './UserRegistrationForm';

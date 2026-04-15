@@ -16,3 +16,8 @@ declare module '@splidejs/vue-splide' {
   export const SplideTrack: DefineComponent<any, any, any>
   export const VueSplide: Plugin
 }
+declare module '*.svg?component' {
+  import { DefineComponent } from 'vue'
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}

@@ -1,8 +1,32 @@
 <script setup lang="ts">
-import Icon from './shared/Icon.vue';
-import AppLink from './shared/AppLink.vue';
-import BaseAvatar from './shared/BaseAvatar.vue';
-const isAuthenticated = true
+import { ref } from 'vue'
+import Icon from './shared/Icon.vue'
+import AppLink from './shared/AppLink.vue'
+import BaseAvatar from './shared/BaseAvatar.vue'
+import LogInModal from './modals/LogInModal.vue'
+import ProfileModal from './modals/ProfileModal.vue'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+
+const loginModalRef = ref<InstanceType<typeof LogInModal> | null>(null)
+const profileModalRef = ref<InstanceType<typeof ProfileModal> | null>(null)
+const authStore = useAuthStore()
+const { logout } = authStore
+const { isAuthenticated } = storeToRefs(authStore)
+const details = ref()
+function openLoginModal() {
+  if (loginModalRef.value) {
+    loginModalRef.value.open();
+  }
+}
+
+function openProfileModal() {
+  if (profileModalRef.value) {
+    profileModalRef.value.open();
+    details.value.removeAttribute('open')
+  }
+}
+
 </script>
 <template>
   <header class="py-6 border-b border-grayscale-200 drop-shadow-[4%]">
@@ -31,13 +55,24 @@ const isAuthenticated = true
             </AppLink>
           </li>
         </ul>
-        <AppLink v-if="isAuthenticated" to="#">
-          <BaseAvatar status="away" />
-        </AppLink>
+        <details v-if="isAuthenticated" class="relative" ref="details">
+          <summary class="list-none cursor-pointer">
+            <BaseAvatar :status="authStore.userProfile.profileComplete ? 'active' : 'away'"
+              :avatar="authStore.userProfile.avatar" />
+          </summary>
+          <div class="absolute right-0 mt-2 w-48 p-4 bg-grayscale-50 rounded-lg shadow-lg z-10">
+            <button class="text-grayscale-500 w-full cursor-pointer hover:bg-grayscale-100"
+              @click="openProfileModal">Profile</button>
+            <hr class="my-1 border-gray-200">
+            <button class="text-helper-error-light w-full cursor-pointer hover:bg-grayscale-100" @click="logout">Log
+              Out</button>
+          </div>
+        </details>
         <ul v-if="!isAuthenticated" class="flex gap-3.75">
           <li>
             <button
-              class="w-28.5 h-15 py-3 px-4 bg-transparent text-xl font-medium text-brand-yellow-500 border-2 border-brand-yellow-300 rounded-lg cursor-pointer">
+              class="w-28.5 h-15 py-3 px-4 bg-transparent text-xl font-medium text-brand-yellow-500 border-2 border-brand-yellow-300 rounded-lg cursor-pointer"
+              @click="openLoginModal">
               Log In
             </button>
           </li>
@@ -51,4 +86,6 @@ const isAuthenticated = true
       </section>
     </nav>
   </header>
+  <LogInModal ref="loginModalRef" />
+  <ProfileModal ref="profileModalRef" />
 </template>
