@@ -23,7 +23,13 @@ export const useRegistrationStore = defineStore('registration', () => {
     formData.append('username', userName.value || '')
     if (avatar.value instanceof File) formData.append('avatar', avatar.value)
     const response = await authStore.register(formData)
-    return response
+    if (!response.ok) {
+      return false
+    }
+    const { data } = response.data
+    authStore.authenticate(data)
+    reset()
+    return true
   }
   function nextStep() {
     if (currentStep.value < totalSteps.value) {
@@ -41,6 +47,15 @@ export const useRegistrationStore = defineStore('registration', () => {
     color = currentStep.value > index ? 'bg-brand-yellow-500' : color
     color = currentStep.value < index - 1 ? 'bg-brand-yellow-50' : color
     return color
+  }
+
+  function reset() {
+    currentStep.value = 1
+    email.value = null
+    password.value = null
+    passwordConfirmation.value = null
+    userName.value = null
+    avatar.value = null
   }
 
   return {

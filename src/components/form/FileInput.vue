@@ -60,9 +60,6 @@ function handleUpdateFiles(files) {
     // files is an array of FilePond file items
     // To handle a single file, you can take the first item
     myFile.value = files.map(fileItem => fileItem.file);
-
-    // Now myFile.value[0] contains your actual File object
-    console.log('Current file:', myFile.value[0]);
 }
 
 watch(myFile, () => {
@@ -120,13 +117,13 @@ watch(myFile, () => {
 }
 
 :deep(.filepond--drop-label) {
-    min-height: 180px;
-    padding: 50px;
+    min-height: 140px;
+    padding: 30px;
 }
 
 /* New Circle Preview Styles */
 .custom-circle-view {
-    min-height: 180px;
+    min-height: 140px;
     display: flex;
     flex-direction: row;
     align-items: center;

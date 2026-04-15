@@ -25,7 +25,7 @@ const ageOptions = Array.from({ length: 120 }, (_, i) => {
 }).filter(value => value.value > 18)
 
 const profileStore = useProfileStore()
-const { avatar, userName, fullName, mobileNumber, age, avatarUrl, ifProfileComplete } = storeToRefs(profileStore)
+const { email, avatar, userName, fullName, mobileNumber, age, avatarUrl, ifProfileComplete } = storeToRefs(profileStore)
 
 async function updateProfile(): Promise<void> {
     const success = await profileStore.updateProfile()
@@ -50,7 +50,7 @@ onMounted(() => {
         </div>
         <form class="modal" @submit.prevent="updateProfile" enctype="multipart/form-data">
             <TextInput type="text" label="Full Name" v-model="fullName" />
-            <TextInput type="email" label="Email" icon="eye" disabled />
+            <TextInput type="email" label="Email" icon="eye" :placeholder="email?.toString() || ''" disabled />
             <div class="flex flex-row gap-2">
                 <TextInput type="text" label="Mobile Number" v-model="mobileNumber" class="w-full" />
                 <SelectInput :options="ageOptions" label="Age" v-model="age" class="shrink-2" />

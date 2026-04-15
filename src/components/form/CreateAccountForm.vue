@@ -28,13 +28,14 @@ const { currentStep, totalSteps, email, password, passwordConfirmation, userName
             </div>
 
             <!-- Step 2 -->
-            <div v-else-if="currentStep === 2">
-                <TextInput type="text" label="Password*" icon="eye" v-model="password" />
-                <TextInput type="password" label="Confirm Password*" icon="eye-off" v-model="passwordConfirmation" />
+            <div v-else-if="currentStep === 2" class="flex flex-col gap-6">
+                <TextInput type="text" label="Password*" autocomplete="off" icon="eye" v-model="password" />
+                <TextInput type="password" label="Confirm Password*" autocomplete="off" icon="eye-off"
+                    v-model="passwordConfirmation" />
             </div>
 
             <!-- Step 3 -->
-            <div v-else-if="currentStep === 3">
+            <div v-else-if="currentStep === 3" class="flex flex-col gap-6">
                 <TextInput type="text" label="UserName*" v-model="userName" />
                 <FileInput label="Upload Avatar" :idle_component="FileUploadIdle" v-model="avatar"
                     accepted-file-types="image/jpeg, image/png, image/webp" :allow-multiple="false" />

@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import apiClient from '@/api/apiClient'
 import { useAuthStore } from './auth'
@@ -11,6 +11,7 @@ export const useProfileStore = defineStore('profile', () => {
   const avatar = ref<File | null>(null)
 
   const authStore = useAuthStore()
+  const { user } = storeToRefs(authStore)
 
   // Getters
   const avatarUrl = computed((): string | null => {
@@ -24,9 +25,7 @@ export const useProfileStore = defineStore('profile', () => {
   })
 
   const ifProfileComplete = computed(() => {
-    return localStorage.getItem('user')
-      ? JSON.parse(localStorage.getItem('user') ?? '{}').profileComplete
-      : false
+    return user && user.value && user.value.profileComplete
   })
 
   const userName = computed(() => {
@@ -34,6 +33,14 @@ export const useProfileStore = defineStore('profile', () => {
       return authStore.user.username
     }
     return null
+  })
+
+  const email = computed(() => {
+    if (authStore.user) {
+      return authStore.user.email
+    } else {
+      return null
+    }
   })
 
   // Actions
@@ -52,7 +59,7 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  async function updateProfile() {
+  async function updateProfile(): Promise<boolean> {
     const formData = new FormData()
     formData.append('full_name', fullName.value || '')
     formData.append('mobile_number', mobileNumber.value || '')
@@ -65,10 +72,15 @@ export const useProfileStore = defineStore('profile', () => {
         Authorization: `Bearer ${authStore.token}`,
       },
     })
+    if (!response.ok) {
+      return false
+    }
+
+    user.value = response.data.data
 
     localStorage.setItem('user', JSON.stringify(response.data.data))
 
-    return !!response.ok
+    return true
   }
 
   return {
@@ -79,6 +91,7 @@ export const useProfileStore = defineStore('profile', () => {
     avatarUrl,
     ifProfileComplete,
     userName,
+    email,
     fetchProfile,
     updateProfile,
   }

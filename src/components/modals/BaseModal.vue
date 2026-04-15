@@ -9,7 +9,7 @@ defineEmits(['close']);
             leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="isOpen" class="fixed inset-0 z-50 flex items-start justify-center bg-black/25 ">
                 <div
-                    class="relative top-27 bg-grayscale-50 rounded-lg max-w-115 p-12.5 w-full transform transition-all">
+                    class="relative top-20 bg-grayscale-50 rounded-lg max-w-115 p-12.5 w-full transform transition-all">
                     <div class="absolute top-8 left-0 px-8 w-full h-auto">
                         <div class="flex flex-row justify-between">
                             <div class="w-full">
