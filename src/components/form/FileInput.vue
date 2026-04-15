@@ -5,7 +5,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
 
 const FilePond = (vueFilePond.default || vueFilePond)(FilePondPluginFileValidateType);
-const props = defineProps(['label']);
+const props = defineProps(['label', 'idle_component']);
 
 const pond = ref(null);
 const isPondReady = ref(false);
@@ -98,7 +98,8 @@ watch(myFile, () => {
             <!-- Idle Slot (Only show when empty) -->
             <Teleport v-if="isPondReady && !uploadedFile" to=".filepond--drop-label">
                 <div class="custom-content-overlay">
-                    <slot name="idle" />
+                    <slot v-if="!props.idle_component" name="idle" />
+                    <component v-else :is="props.idle_component" />
                 </div>
             </Teleport>
         </div>

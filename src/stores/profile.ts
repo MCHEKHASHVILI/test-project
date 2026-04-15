@@ -29,6 +29,13 @@ export const useProfileStore = defineStore('profile', () => {
       : false
   })
 
+  const userName = computed(() => {
+    if (authStore.user) {
+      return authStore.user.username
+    }
+    return null
+  })
+
   // Actions
   async function fetchProfile() {
     try {
@@ -71,6 +78,7 @@ export const useProfileStore = defineStore('profile', () => {
     avatar,
     avatarUrl,
     ifProfileComplete,
+    userName,
     fetchProfile,
     updateProfile,
   }

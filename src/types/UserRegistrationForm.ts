@@ -4,5 +4,5 @@ export interface UserRegistrationForm {
   email: UserAuthenticationForm['email']
   password: UserAuthenticationForm['password']
   password_confirmation: UserAuthenticationForm['password']
-  avatar: string
+  avatar: File | null
 }

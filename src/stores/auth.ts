@@ -14,9 +14,14 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && token.value !== null)
+
   // Actions
-  async function register(userRegistrationForm: UserRegistrationForm) {
+  async function register(userRegistrationForm: FormData) {
     const response = await apiClient.post('register', userRegistrationForm)
+    if (!response.ok) {
+      return false
+    }
+    return true
   }
 
   async function login(credentials: UserAuthenticationForm) {

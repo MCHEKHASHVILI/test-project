@@ -4,12 +4,14 @@ import Icon from './shared/Icon.vue'
 import AppLink from './shared/AppLink.vue'
 import BaseAvatar from './shared/BaseAvatar.vue'
 import LogInModal from './modals/LogInModal.vue'
+import RegisterModal from './modals/RegisterModal.vue'
 import ProfileModal from './modals/ProfileModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useProfileStore } from '@/stores/profile'
 import { storeToRefs } from 'pinia'
 
 const loginModalRef = ref<InstanceType<typeof LogInModal> | null>(null)
+const registerModalRef = ref<InstanceType<typeof RegisterModal> | null>(null)
 const profileModalRef = ref<InstanceType<typeof ProfileModal> | null>(null)
 const authStore = useAuthStore()
 const profileStore = useProfileStore()
@@ -17,6 +19,7 @@ const { logout } = authStore
 const { isAuthenticated } = storeToRefs(authStore)
 const { avatarUrl, ifProfileComplete } = storeToRefs(profileStore)
 const details = ref()
+
 function openLoginModal() {
   if (loginModalRef.value) {
     loginModalRef.value.open();
@@ -29,7 +32,11 @@ function openProfileModal() {
     details.value.removeAttribute('open')
   }
 }
-
+function openRegisterModal() {
+  if (registerModalRef.value) {
+    registerModalRef.value.open();
+  }
+}
 </script>
 <template>
   <header class="py-6 border-b border-grayscale-200 drop-shadow-[4%]">
@@ -80,7 +87,8 @@ function openProfileModal() {
           </li>
           <li>
             <button
-              class="w-31.25 h-15 py-3 px-4 text-grayscale-50 text-xl font-medium bg-brand-yellow-500 rounded-lg cursor-pointer">
+              class="w-31.25 h-15 py-3 px-4 text-grayscale-50 text-xl font-medium bg-brand-yellow-500 rounded-lg cursor-pointer"
+              @click="openRegisterModal">
               Sign Up
             </button>
           </li>
@@ -88,6 +96,7 @@ function openProfileModal() {
       </section>
     </nav>
   </header>
-  <LogInModal v-if="!isAuthenticated" ref="loginModalRef" />
+  <LogInModal v-if="!isAuthenticated" ref="loginModalRef" @toRegister="openRegisterModal" />
+  <RegisterModal v-if="!isAuthenticated" ref="registerModalRef" @toLogIn="openLoginModal" />
   <ProfileModal v-if="isAuthenticated" ref="profileModalRef" />
 </template>
