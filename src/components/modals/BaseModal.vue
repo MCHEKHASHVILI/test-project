@@ -1,7 +1,15 @@
 <script setup>
+import { watch } from 'vue';
 import Icon from '../shared/Icon.vue';
-defineProps({ isOpen: Boolean, title: String, subtitle: String });
+const props = defineProps({ isOpen: Boolean, title: String, subtitle: String });
 defineEmits(['close']);
+watch(() => props.isOpen, (value) => {
+    if (value) {
+        document.body.classList.add('overflow-hidden');
+    } else {
+        document.body.classList.remove('overflow-hidden');
+    }
+})
 </script>
 <template>
     <Teleport to="body">

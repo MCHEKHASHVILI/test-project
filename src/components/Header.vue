@@ -6,6 +6,7 @@ import BaseAvatar from './shared/BaseAvatar.vue'
 import LogInModal from './modals/LogInModal.vue'
 import RegisterModal from './modals/RegisterModal.vue'
 import ProfileModal from './modals/ProfileModal.vue'
+import EnrolledCoursesModal from './modals/EnrolledCoursesModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useProfileStore } from '@/stores/profile'
 import { storeToRefs } from 'pinia'
@@ -13,6 +14,7 @@ import { storeToRefs } from 'pinia'
 const loginModalRef = ref<InstanceType<typeof LogInModal> | null>(null)
 const registerModalRef = ref<InstanceType<typeof RegisterModal> | null>(null)
 const profileModalRef = ref<InstanceType<typeof ProfileModal> | null>(null)
+const enrolledCoursesModalRef = ref<InstanceType<typeof EnrolledCoursesModal> | null>(null)
 const authStore = useAuthStore()
 const profileStore = useProfileStore()
 const { logout } = authStore
@@ -23,6 +25,11 @@ const details = ref()
 function openLoginModal() {
   if (loginModalRef.value) {
     loginModalRef.value.open();
+  }
+}
+function openEnrolledCoursesModal() {
+  if (enrolledCoursesModalRef.value) {
+    enrolledCoursesModalRef.value.open();
   }
 }
 
@@ -57,8 +64,9 @@ function openRegisterModal() {
 
           </li>
           <li v-if="isAuthenticated">
-            <AppLink :to="{ name: 'courses' }"
-              class="w-full group flex items-center justify-between gap-2 p-3.75 rounded-lg text-xl font-medium text-grayscale-600 hover:text-brand-yellow-500 transition-colors">
+            <AppLink to="#"
+              class="w-full group flex items-center justify-between gap-2 p-3.75 rounded-lg text-xl font-medium text-grayscale-600 hover:text-brand-yellow-500 transition-colors"
+              @click.prevent="openEnrolledCoursesModal">
               <Icon name="Note" width="26" height="26" viewBox="0 0 24 22"
                 class="[&_path]:stroke-grayscale-600! group-hover:[&_path]:stroke-brand-yellow-500!" />
               <span>Enrolled Courses</span>
@@ -99,4 +107,5 @@ function openRegisterModal() {
   <LogInModal v-if="!isAuthenticated" ref="loginModalRef" @toRegister="openRegisterModal" />
   <RegisterModal v-if="!isAuthenticated" ref="registerModalRef" @toLogIn="openLoginModal" />
   <ProfileModal v-if="isAuthenticated" ref="profileModalRef" />
+  <EnrolledCoursesModal v-if="isAuthenticated" ref="enrolledCoursesModalRef" />
 </template>
