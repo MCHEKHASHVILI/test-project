@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseIcon from '@/components/shared/BaseIcon.vue'
-const model = defineModel<string | number>({ default: null });
+const model = defineModel<string | number | null>({ default: null });
 
 defineProps<{
     label?: string;

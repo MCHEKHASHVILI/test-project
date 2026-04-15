@@ -77,7 +77,7 @@ watch(myFile, () => {
 
         <div class="pond-wrapper">
             <!-- Show FilePond only if no file is uploaded -->
-            <file-pond v-show="!uploadedFile" ref="pond" v-bind="$attrs" :credits="false" label-idle=""
+            <file-pond v-show="!uploadedFile" ref="pond" v-bind="$attrs" :credits="[]" label-idle=""
                 @init="handlePondInit" @addfile="handleFileAdded" @removefile="handleFileRemoved"
                 @updatefiles="handleUpdateFiles" />
 

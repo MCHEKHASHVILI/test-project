@@ -7,22 +7,13 @@ export const useAuthStore = defineStore('auth', () => {
   // State
   const email = ref<UserAuthenticationForm['email']>()
   const password = ref<UserAuthenticationForm['password']>()
-  const user = ref<UserProfile>()
-  const avatar = ref<UserProfile['avatar']>()
-  const token = ref<string>()
+  const user = ref<UserProfile | null>(
+    JSON.parse(localStorage.getItem('user') ?? '{}') as UserProfile,
+  )
+  const token = ref<string | null>(localStorage.getItem('token') || null)
 
   // Getters
-  const isAuthenticated = computed(() => !!token.value && token.value !== 'undefined')
-  const userProfile = computed({
-    get() {
-      const rawData = localStorage.getItem('user') ?? '{}'
-
-      return JSON.parse(rawData) as UserProfile
-    },
-    set(newValue: UserProfile) {
-      email.value = newValue.email
-    },
-  })
+  const isAuthenticated = computed(() => !!token.value && token.value !== null)
   // Actions
   async function register(userRegistrationForm: UserRegistrationForm) {
     const response = await apiClient.post('register', userRegistrationForm)
@@ -48,55 +39,20 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
-    user.value = undefined
-    token.value = undefined
+    user.value = null
+    token.value = null
     localStorage.removeItem('user')
     localStorage.removeItem('token')
-  }
-
-  const toSnakeCase = (str: string) => {
-    return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`).replace(/^_/, '') // Removes a leading underscore if the input was PascalCase
-  }
-
-  async function updateProfile() {
-    const formData = new FormData()
-
-    Object.entries(userProfile.value).forEach(([key, value]) => {
-      if (key === 'avatar' && value instanceof File) {
-        formData.append(key, value)
-      } else if (key !== 'avatar') {
-        formData.append(toSnakeCase(key), value)
-      }
-    })
-
-    const response = await apiClient.put('profile', formData, {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'multipart-form/data',
-        Authorization: `Bearer ${token.value}`,
-      },
-    })
-
-    localStorage.setItem('user', JSON.stringify(response.data.data))
-
-    if (response.ok) {
-      userProfile.value.avatar = response.data.data.avatar
-    }
-
-    return !!response.ok
   }
 
   return {
     email,
     password,
-    avatar,
     user,
     token,
     isAuthenticated,
-    userProfile,
     register,
     login,
     logout,
-    updateProfile,
   }
 })

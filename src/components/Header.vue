@@ -6,13 +6,16 @@ import BaseAvatar from './shared/BaseAvatar.vue'
 import LogInModal from './modals/LogInModal.vue'
 import ProfileModal from './modals/ProfileModal.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useProfileStore } from '@/stores/profile'
 import { storeToRefs } from 'pinia'
 
 const loginModalRef = ref<InstanceType<typeof LogInModal> | null>(null)
 const profileModalRef = ref<InstanceType<typeof ProfileModal> | null>(null)
 const authStore = useAuthStore()
+const profileStore = useProfileStore()
 const { logout } = authStore
 const { isAuthenticated } = storeToRefs(authStore)
+const { avatarUrl, ifProfileComplete } = storeToRefs(profileStore)
 const details = ref()
 function openLoginModal() {
   if (loginModalRef.value) {
@@ -57,8 +60,7 @@ function openProfileModal() {
         </ul>
         <details v-if="isAuthenticated" class="relative" ref="details">
           <summary class="list-none cursor-pointer">
-            <BaseAvatar :status="authStore.userProfile.profileComplete ? 'active' : 'away'"
-              :avatar="authStore.userProfile.avatar" />
+            <BaseAvatar :status="ifProfileComplete ? 'active' : 'away'" :avatar="avatarUrl" />
           </summary>
           <div class="absolute right-0 mt-2 w-48 p-4 bg-grayscale-50 rounded-lg shadow-lg z-10">
             <button class="text-grayscale-500 w-full cursor-pointer hover:bg-grayscale-100"
@@ -86,6 +88,6 @@ function openProfileModal() {
       </section>
     </nav>
   </header>
-  <LogInModal ref="loginModalRef" />
-  <ProfileModal ref="profileModalRef" />
+  <LogInModal v-if="!isAuthenticated" ref="loginModalRef" />
+  <ProfileModal v-if="isAuthenticated" ref="profileModalRef" />
 </template>

@@ -4,7 +4,7 @@ import StatusDot from '@/assets/svg/StatusDot.svg?component'
 
 const props = withDefaults(defineProps<{
     status: 'away' | 'active' | 'busy'
-    avatar?: string
+    avatar?: string | null
 }>(), {
     status: 'away'
 })
