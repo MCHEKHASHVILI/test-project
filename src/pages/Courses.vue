@@ -5,105 +5,43 @@ import BrowseCourseCard from '@/components/cards/BrowseCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
 import Pagination from '@/components/shared/Pagination.vue'
-import apiClient from '@/api/apiClient'
-import { ref, type Ref, onMounted, computed, watch } from "vue"
-import { BrowseCoursesResponse } from '@types'
+import { onMounted, watch } from "vue"
+import { useCoursesStore } from '@/stores/courses'
+import { storeToRefs } from 'pinia'
 
-const categories = ref(null);
-const topics = ref(null);
-const instructors = ref(null);
+const coursesStore = useCoursesStore()
+const {
+  courses,
+  categories,
+  topics,
+  instructors,
+  filters,
+  sort,
+  page,
+  queryParams,
+  totalFiltersCount,
+  sortOptions
+} = storeToRefs(coursesStore)
 
-const courses = ref<BrowseCoursesResponse | null>(null)
-
-const filters = ref({
-  topics: [] as number[],
-  categories: [] as number[],
-  instructors: [] as number[]
-})
-
-/**
- * @Todo find a way get the possible keys from api to make it more dynamic.
- */
-const sortOptions = ref([
-  {
-    value: 'newest',
-    label: 'Newest First'
-  },
-  {
-    value: 'price_asc',
-    label: 'Price: Low to High'
-  },
-  {
-    value: 'price_desc',
-    label: 'Price: High to Low'
-  },
-  {
-    value: 'popular',
-    label: 'Most Popular'
-  },
-  {
-    value: 'title_asc',
-    label: 'Title: A-Z'
-  }
-])
-
-const sort = defineModel<string>()
-const page = defineModel<number>('page', { default: 1 })
-
-function clearFilters(): void {
-  (Object.keys(filters.value) as Array<keyof typeof filters.value>).forEach(key => {
-    if (Array.isArray(filters.value[key])) {
-      filters.value[key] = []
-    }
-  })
-}
-
-const queryParams = computed(() => {
-  return {
-    topics: filters.value.topics,
-    categories: filters.value.categories,
-    instructors: filters.value.instructors,
-    sort: sort.value,
-    page: page.value,
-  }
-})
+const {
+  fetchCategories,
+  fetchInstructors,
+  fetchTopics,
+  fetchCourses,
+  clearFilters
+} = coursesStore
 
 watch(filters, () => page.value = 1, { deep: true })
 
 watch(queryParams, async (newValue, oldValue) => {
-  await getCourses(queryParams.value)
+  await fetchCourses(queryParams.value)
 }, { deep: true })
 
-const totalFiltersCount = computed((): number => {
-  return Object.values(filters.value).reduce((sum, arr) => sum + arr.length, 0)
-})
-
-async function getCourses(params: Object | null = null) {
-  try {
-    const response = await apiClient.get('courses', {
-      params
-    });
-    courses.value = response.data;
-    page.value = response.data.meta.currentPage
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-
-async function getResource(endpoint: string, resourse: Ref): Promise<void> {
-  try {
-    const response = await apiClient.get(endpoint);
-    resourse.value = response.data.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
-
 onMounted(() => {
-  getResource('categories', categories)
-  getResource('topics', topics)
-  getResource('instructors', instructors)
-  getCourses()
+  fetchCategories()
+  fetchInstructors()
+  fetchTopics()
+  fetchCourses()
 });
 </script>
 
