@@ -277,7 +277,6 @@ export const useCoursesStore = defineStore('courses', () => {
     scheduleOptions,
     timeSlotOptions,
     sessionTypeOptions,
-    updatedSessionOptions,
     fetchCourse,
     fetchTopics,
     clearFilters,
