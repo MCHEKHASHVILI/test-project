@@ -22,7 +22,7 @@ onClickOutside(modalRef, () => {
             <div v-if="isOpen" class="fixed inset-0 z-50 flex items-start justify-end bg-black/25">
                 <div class="bg-grayscale-100 z-55 max-w-198.5 p-12.5 w-full h-screen  overflow-y-auto scrollbar-hide no-scrollbar transform transition-all"
                     ref="modalRef">
-                    <div class="flex flex-col max-h-full">
+                    <div class="flex flex-col h-full">
                         <div class="flex flex-row justify-between items-center">
                             <h2 class="text-[32px] text-grayscale-900 font-semibold capitalize">
                                 enrolled courses
@@ -31,7 +31,7 @@ onClickOutside(modalRef, () => {
                                 enrollments
                             </small>
                         </div>
-                        <div class="my-6">
+                        <div class="my-6 flex grow items-center justify-center">
                             <slot></slot>
                         </div>
                     </div>
