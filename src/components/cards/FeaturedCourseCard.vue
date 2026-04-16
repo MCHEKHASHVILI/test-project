@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Icon from '@/components/shared/Icon.vue'
+import AppLink from '../shared/AppLink.vue';
 import { Course } from '@/types'
 defineProps<{ course: Course }>()
 </script>
@@ -22,10 +23,8 @@ defineProps<{ course: Course }>()
                     <span class="text-xs font-medium text-grayscale-400 capitalize">starting from</span>
                     <h2 class="text-[32px] font-semibold text-grayscale-900">${{ course.basePrice }}</h2>
                 </div>
-                <button
-                    class="py-4.25 px-6.25 rounded-lg text-xl font-medium text-grayscale-50 bg-brand-yellow-500 cursor-pointer">
-                    Details
-                </button>
+                <AppLink :to="{ name: 'details', params: { id: course.id } }"
+                    class="btn-primary first-letter:capitalize " v-text="'details'" />
             </div>
         </div>
     </div>

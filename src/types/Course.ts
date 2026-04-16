@@ -7,6 +7,7 @@ export interface Course {
   image: string
   basePrice: number
   durationWeeks: number
+  hours?: number
   isFeatured: true
   avgRating: number
   reviewCount: number

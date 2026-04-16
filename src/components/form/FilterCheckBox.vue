@@ -22,7 +22,7 @@ const toggleCheckbox = (event: any) => {
         updatedArray = updatedArray.filter(item => item !== props.value)
     }
     emit('update:modelValue', updatedArray)
-};
+}
 
 </script>
 <template>

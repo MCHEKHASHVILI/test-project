@@ -87,16 +87,12 @@ function openRegisterModal() {
         </details>
         <ul v-if="!isAuthenticated" class="flex gap-3.75">
           <li>
-            <button
-              class="w-28.5 h-15 py-3 px-4 bg-transparent text-xl font-medium text-brand-yellow-500 border-2 border-brand-yellow-300 rounded-lg cursor-pointer"
-              @click="openLoginModal">
+            <button class="btn-outline w-28.5 h-15 py-3 px-4" @click="openLoginModal">
               Log In
             </button>
           </li>
           <li>
-            <button
-              class="w-31.25 h-15 py-3 px-4 text-grayscale-50 text-xl font-medium bg-brand-yellow-500 rounded-lg cursor-pointer"
-              @click="openRegisterModal">
+            <button class="btn-primary w-31.25 h-15 py-3 px-4" @click="openRegisterModal">
               Sign Up
             </button>
           </li>

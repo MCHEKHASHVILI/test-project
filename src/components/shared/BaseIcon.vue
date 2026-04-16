@@ -41,7 +41,7 @@ const ICON_MAP: Record<string, IconDef> = {
     moon: { x: 23, y: 82, w: 22, h: 22 },
     monitor: { x: 72, y: 84, w: 20, h: 18 },
     warning: { x: 120, y: 82, w: 16, h: 14 },
-    'yin-yang': { x: 172, y: 88, w: 14, h: 14 },
+    'yin-yang': { x: 172, y: 84, w: 26, h: 24 },
     'circle-fill': { x: 224, y: 84, w: 16, h: 18 },
     circle: { x: 272, y: 84, w: 18, h: 16 },
     'circle-check': { x: 322, y: 84, w: 18, h: 18 },
