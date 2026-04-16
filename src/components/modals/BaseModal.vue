@@ -1,8 +1,10 @@
 <script setup>
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
 import Icon from '../shared/Icon.vue';
+import { onClickOutside } from '@vueuse/core'
+const modalRef = ref(null);
 const props = defineProps({ isOpen: Boolean, title: String, subtitle: String });
-defineEmits(['close']);
+const emit = defineEmits(['close']);
 watch(() => props.isOpen, (value) => {
     if (value) {
         document.body.classList.add('overflow-hidden');
@@ -10,14 +12,17 @@ watch(() => props.isOpen, (value) => {
         document.body.classList.remove('overflow-hidden');
     }
 })
+onClickOutside(modalRef, () => {
+    emit('close')
+})
 </script>
 <template>
     <Teleport to="body">
         <Transition enter-active-class="duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
             leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="isOpen" class="fixed inset-0 z-50 flex items-start justify-center bg-black/25 ">
-                <div
-                    class="relative top-20 bg-grayscale-50 rounded-lg max-w-115 p-12.5 w-full transform transition-all">
+                <div class="relative top-20 bg-grayscale-50 rounded-lg max-w-115 p-12.5 w-full transform transition-all"
+                    ref="modalRef">
                     <div class="absolute top-8 left-0 px-8 w-full h-auto">
                         <div class="flex flex-row justify-between">
                             <div class="w-full">
