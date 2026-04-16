@@ -130,6 +130,13 @@ export const useCoursesStore = defineStore('courses', () => {
   const totalFiltersCount = computed((): number => {
     return Object.values(filters.value).reduce((sum, arr) => sum + arr.length, 0)
   })
+  const filteredTopics = computed(() => {
+    if (!filters.value.categories.length) {
+      return topics.value
+    } else {
+      return topics.value.filter((topic) => filters.value.categories.includes(topic.categoryId))
+    }
+  })
 
   return {
     sort,
@@ -149,5 +156,6 @@ export const useCoursesStore = defineStore('courses', () => {
     fetchFeaturedCourses,
     queryParams,
     totalFiltersCount,
+    filteredTopics,
   }
 })

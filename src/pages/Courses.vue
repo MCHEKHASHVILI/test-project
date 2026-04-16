@@ -13,7 +13,7 @@ const coursesStore = useCoursesStore()
 const {
   courses,
   categories,
-  topics,
+  filteredTopics,
   instructors,
   filters,
   sort,
@@ -77,7 +77,7 @@ onMounted(() => {
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">Topics</h4>
             <div class="flex flex-wrap gap-2">
-              <FilterCheckBox v-for="item in topics" :data="item" v-model="filters.topics" :key="item.id"
+              <FilterCheckBox v-for="item in filteredTopics" :data="item" v-model="filters.topics" :key="item.id"
                 :value="item.id" />
             </div>
           </section>
