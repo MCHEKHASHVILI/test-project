@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import apiClient from '@/api/apiClient'
+import { onMounted } from 'vue'
 import MainSlider from '@/components/sliders/MainSlider.vue'
 import FeaturedCourseCard from '@/components/cards/FeaturedCourseCard.vue'
-import { Course } from '@types'
+import { useCoursesStore } from '@/stores/courses'
+import { storeToRefs } from 'pinia'
 
-const featuredCourses = ref<Course[] | null>(null)
-
+const coursesStore = useCoursesStore()
+const { featuredCourses } = storeToRefs(coursesStore)
+const { fetchFeaturedCourses } = coursesStore
 onMounted(async () => {
-  try {
-    const response = await apiClient.get('courses/featured')
-    featuredCourses.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching data:', error)
-  }
+  fetchFeaturedCourses()
 })
 
 </script>

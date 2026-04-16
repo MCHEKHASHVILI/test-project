@@ -9,10 +9,12 @@ import {
   SelectOption,
   FetchCoursesParams,
   SortOption,
+  Course,
 } from '@types'
 
 export const useCoursesStore = defineStore('courses', () => {
   // State
+  const featuredCourses = ref<Course[] | null>(null)
   const courses = ref<BrowseCoursesResponse | null>(null)
   const categories = ref<Category[]>([])
   const topics = ref<Topic[]>([])
@@ -96,6 +98,16 @@ export const useCoursesStore = defineStore('courses', () => {
       console.error('Failed to fetch courses:', error)
     }
   }
+  const fetchFeaturedCourses = async () => {
+    try {
+      const response = await apiClient.get('/courses/featured')
+      if (response.ok) {
+        featuredCourses.value = response.data.data
+      }
+    } catch (error) {
+      console.error('Failed to fetch featured courses:', error)
+    }
+  }
 
   const clearFilters = (): void => {
     ;(Object.keys(filters.value) as Array<keyof typeof filters.value>).forEach((key) => {
@@ -128,11 +140,13 @@ export const useCoursesStore = defineStore('courses', () => {
     categories,
     sortOptions,
     instructors,
+    featuredCourses,
     fetchTopics,
     clearFilters,
     fetchCourses,
     fetchCategories,
     fetchInstructors,
+    fetchFeaturedCourses,
     queryParams,
     totalFiltersCount,
   }
