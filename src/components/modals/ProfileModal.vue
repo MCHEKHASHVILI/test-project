@@ -49,11 +49,12 @@ onMounted(() => {
             </div>
         </div>
         <form class="modal" @submit.prevent="updateProfile" enctype="multipart/form-data">
-            <TextInput type="text" label="Full Name" v-model="fullName" />
+            <TextInput type="text" label="Full Name" icon="edit" v-model="fullName" />
             <TextInput type="email" label="Email" icon="eye" :placeholder="email?.toString() || ''" disabled />
             <div class="flex flex-row gap-2">
-                <TextInput type="text" label="Mobile Number" v-model="mobileNumber" class="w-full" />
-                <SelectInput :options="ageOptions" label="Age" v-model="age" class="shrink-2" />
+                <TextInput type="text" label="Mobile Number" icon="check-sm" prefix="+995" v-model="mobileNumber"
+                    class="w-full" />
+                <SelectInput :options="ageOptions" label="Age" icon="eye" v-model="age" class="shrink-2" />
             </div>
             <FileInput label="Upload Avatar" v-model="avatar" :idle_component="FileUploadIdle"
                 accepted-file-types="image/jpeg, image/png, image/webp" :allow-multiple="false" />
