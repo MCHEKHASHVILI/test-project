@@ -3,7 +3,7 @@ import { SessionType } from '@/types'
 /**
  * @Todo find a way get the possible keys from api to make it more dynamic.
  */
-export const sessionTypeOptions: SessionType[] = [
+export const sessionTypeOptions = ref<SessionType[]>([
   {
     id: 1,
     name: 'Onlnie',
@@ -28,4 +28,4 @@ export const sessionTypeOptions: SessionType[] = [
     priceModifier: 0,
     availableSeats: 0,
   },
-]
+])

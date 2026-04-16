@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useAuthStore } from '../auth'
 import apiClient from '@/api/apiClient'
 import { useRoute } from 'vue-router'
@@ -180,6 +180,31 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   }
 
+  async function enrollCourse(force = false) {
+    try {
+      const response = await apiClient.post(
+        '/enrollments',
+        {
+          courseId: route.params.id,
+          courseScheduleId: courseOrder.value.session?.courseScheduleId
+            ? courseOrder.value.session.courseScheduleId
+            : null,
+          force: force,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`,
+          },
+        },
+      )
+      if (response.ok) {
+        return response
+      }
+    } catch (error) {
+      console.error('Failed to Enroll The Course:', error)
+    }
+  }
+
   // Getters
   const queryParams = computed(() => {
     return {
@@ -236,15 +261,42 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   })
 
+  const updatedSessionOptions = computed(() => {
+    const result = sessionTypeOptions.value.map((localItem) => {
+      // Look for the matching dynamic data from the API response
+      const match = sessionTypes.value.find((apiItem: any) => apiItem.id === localItem.id)
+
+      // If no match from API, return the local item as-is
+      if (!match) {
+        return { ...localItem }
+      }
+
+      // Merge: create a new object with local defaults + API realtime updates
+      return {
+        ...localItem,
+        name: match.name,
+        location: match.location,
+        priceModifier: +match.priceModifier,
+        availableSeats: match.availableSeats,
+        courseScheduleId: match.courseScheduleId,
+      }
+    })
+
+    return result
+  })
+
   const courseOrder = computed(() => {
     const course = courseDetailed.value
-    const schedule = scheduleOptions.value.find((option) => option.id === scheduleId.value)
+    const schedule = updatedSessionOptions.value.find((option) => option.id === scheduleId.value)
     const slot = timeSlotOptions.value.find((option) => option.id === timeSlotId.value)
-    const session = sessionTypeOptions.find((option) => option.id === sessionTypeId.value)
+    const session = updatedSessionOptions.value.find((option) => option.id === sessionTypeId.value)
 
-    const basePrice = course?.basePrice ?? 0
-    const additionalPrice = session?.priceModifier ?? 0
+    const basePrice = course?.basePrice ? +course.basePrice : 0
+    const additionalPrice = session?.priceModifier ? +session.priceModifier : 0
     const totalPrice = basePrice + additionalPrice
+
+    const bookingAuthorized: boolean =
+      authStore.isAuthenticated && !!sessionTypeId.value && !!timeSlotId.value && !!scheduleId.value
 
     return {
       course: course,
@@ -254,6 +306,7 @@ export const useCoursesStore = defineStore('courses', () => {
       basePrice: basePrice,
       additionalPrice: additionalPrice,
       totalPrice: totalPrice,
+      bookingAuthorized: bookingAuthorized,
     }
   })
 
@@ -277,6 +330,7 @@ export const useCoursesStore = defineStore('courses', () => {
     scheduleOptions,
     timeSlotOptions,
     sessionTypeOptions,
+    updatedSessionOptions,
     fetchCourse,
     fetchTopics,
     clearFilters,
@@ -287,6 +341,7 @@ export const useCoursesStore = defineStore('courses', () => {
     fetchFeaturedCourses,
     fetchTimeSlots,
     fetchSessionTypes,
+    enrollCourse,
     queryParams,
     totalFiltersCount,
     filteredTopics,

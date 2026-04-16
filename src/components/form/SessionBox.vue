@@ -3,7 +3,11 @@ import BaseIcon from '../shared/BaseIcon.vue';
 import { SessionType } from '@/types';
 const props = defineProps<{ availableIds: number[], options: SessionType[] }>()
 const model = defineModel();
-const available = (i: number) => props.availableIds.includes(i) && (props.options.find((option) => option.id = i)?.availableSeats as number > 0)
+function available(i: number): boolean {
+    const option = props.options.find((option) => option.id as number === i)
+    const availabelSeats = (option) ? option.availableSeats : 0
+    return props.availableIds.includes(i) && availabelSeats > 0
+} 
 </script>
 
 <template>

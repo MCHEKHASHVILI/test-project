@@ -8,28 +8,10 @@ import ScheduleBox from '@/components/form/ScheduleBox.vue'
 import TimeBox from '@/components/form/TimeBox.vue'
 import SessionBox from '@/components/form/SessionBox.vue'
 import { useCoursesStore } from '@/stores/courses';
-import { sessionTypeOptions } from '@/stores/courses/sessioTypeOptions'
 import { storeToRefs } from 'pinia';
 const coursesStore = useCoursesStore()
-const { courseDetailed, scheduleIds, scheduleId, timeSlotIds, timeSlotId, sessionTypeIds, sessionTypeId, scheduleOptions, timeSlotOptions, sessionTypes } = storeToRefs(coursesStore)
-const { fetchCourse, fetchSchedules, fetchTimeSlots, fetchSessionTypes } = coursesStore
-
-
-const updatedSessionOptions = computed(() => {
-  return sessionTypeOptions.map((localItem) => {
-    // Look for the matching dynamic data from the API response
-    const match = sessionTypes.value.find((apiItem: any) => apiItem.id === localItem.id)
-
-    if (!match) return localItem
-
-    // Merge: localItem provides the icons/names, match provides the API updates
-    localItem.name = match.name
-    localItem.location = match.location
-    localItem.priceModifier = match.priceModifier
-    localItem.availableSeats = match.availableSeats
-    return localItem
-  })
-})
+const { courseDetailed, scheduleIds, scheduleId, timeSlotIds, timeSlotId, sessionTypeIds, sessionTypeId, scheduleOptions, timeSlotOptions, courseOrder, updatedSessionOptions } = storeToRefs(coursesStore)
+const { fetchCourse, fetchSchedules, fetchTimeSlots, fetchSessionTypes, enrollCourse } = coursesStore
 
 const panels = ref([
   { id: 1, title: 'Select Weekly Schedule', icons: ['up-circle', '1-circle'], opened: false },
@@ -43,11 +25,18 @@ function togglePanel(id: number) {
   panel.opened = !panel.opened
 }
 
+function onSubmit() {
+  const response = enrollCourse()
+  console.log(response)
+}
+
 watch(scheduleId, () => {
+  if (!scheduleId.value) return
   fetchTimeSlots()
 })
 
 watch(timeSlotId, () => {
+  if (!timeSlotId.value) return
   fetchSessionTypes()
 })
 
@@ -146,19 +135,20 @@ onMounted(() => {
           <div class="w-full aspect-2/1 flex flex-col gap-7.75 border border-grayscale-100 rounded-xl bg-gray-50 p-10">
             <div class="flex items-center justify-between text-grayscale-400">
               <h1>Total Price</h1>
-              <span class="text-grayscale-800">Price</span>
+              <span class="text-grayscale-800" v-text="courseOrder.totalPrice.toFixed(2)" />
             </div>
             <div class="w-full flex flex-col gap-3 items-center justify-between text-grayscale-400">
               <div class="w-full flex items-center justify-between">
                 <h1>Base Price</h1>
-                <span class="text-grayscale-800">Price</span>
+                <span class="text-grayscale-800" v-text="courseOrder.basePrice.toFixed(2)" />
               </div>
               <div class="w-full flex items-center justify-between">
                 <h1>Session Type</h1>
-                <span class="text-grayscale-800">Price</span>
+                <span class="text-grayscale-800" v-text="courseOrder.additionalPrice.toFixed(2)" />
               </div>
             </div>
-            <button class="btn-primary capitalize">Enroll Now</button>
+            <button class="btn-primary capitalize" :disabled="!courseOrder.bookingAuthorized"
+              @click.prevent="onSubmit">Enroll Now</button>
           </div>
         </div>
       </div>
