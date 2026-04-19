@@ -11,15 +11,11 @@ function available(i: number): boolean {
 </script>
 
 <template>
-    <div class="flex-1 flex flex-row justify-between gap-2">
+    <fieldset>
         <label v-for="option in options" :key="option.id" class="flex-1 cursor-pointer">
             <input type="radio" :value="option.id" v-model="model" class="peer hidden"
                 :disabled="!available(option.id)" />
-            <div
-                class="p-3.75 flex-1 aspect-square flex items-center justify-center gap-1 border border-grayscale-200 bg-grayscale-50 rounded-xl text-grayscale-800
-                peer-checked:bg-brand-yellow-100 peer-checked:border-brand-yellow-300 peer-checked:text-brand-yellow-500
-                 peer-enabled:hover:bg-brand-yellow-100 peer-enabled:hover:border-brand-yellow-300 peer-enabled:hover:text-brand-yellow-500
-                 peer-disabled:border-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:cursor-not-allowed transform duration-500 transition-all ease-in-out">
+            <div class="custom-radio">
                 <div class="flex flex-col items-center justify-between gap-1 text-nowrap">
                     <BaseIcon v-if="option.icon" :name="option.icon" width="26" height="26" />
                     <h5 class="block font-semibold capitalize" v-text="option.name" />
@@ -35,12 +31,12 @@ function available(i: number): boolean {
                 <small v-if="option.availableSeats === 0" v-text="'Fully Booked'" />
                 <div v-if="option.availableSeats > 0 && option.availableSeats < 5"
                     class="flex flex-row gap-1 justify-start items-center text-[#F4A316]">
-                    <BaseIcon v-if="option.location" name="warning" />
+                    <BaseIcon v-if="option.location" name="warning" class="text-[#F4A316]" />
                     <small v-text="`Only ${option.availableSeats} seats left`" />
                 </div>
                 <small v-if="option.availableSeats > 0 && option.availableSeats > 4"
                     v-text="`${option.availableSeats} Seats available`" />
             </div>
         </label>
-    </div>
+    </fieldset>
 </template>

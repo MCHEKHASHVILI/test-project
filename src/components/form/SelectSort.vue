@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { SelectOption } from '@/types'
-import Icon from '../shared/Icon.vue'
+import BaseIcon from '../shared/BaseIcon.vue'
 
 const model = defineModel<SelectOption['value']>()
 
@@ -34,16 +34,16 @@ const isActive = computed(() => {
             class="relative flex items-center justify-between gap-2 min-w-62 h-12.25 rounded-[10px] border border-grayscale-100 bg-grayscale-50 px-5 py-1.75 text-left focus:outline-none cursor-pointer">
             <div class="w-full flex flex-row items-center justify-start gap-2">
                 <span class="text-[#8E8E8E] whitespace-nowrap">Sort By:</span>
-                <span class="text-brand-yellow-500 font-medium leading-6 truncate">{{ optionLabel }}</span>
+                <span class="text-purple-500 font-medium leading-6 truncate">{{ optionLabel }}</span>
             </div>
-            <Icon name="SelectArrow" />
+            <BaseIcon name="SelectArrow" />
         </button>
         <transition name="fade">
             <ul v-if="isOpen"
                 class="absolute z-50 top-full mt-1 w-full rounded-[10px] border border-grayscale-100 bg-grayscale-50 overflow-y-auto shadow-sm">
                 <li v-for="option in options" :key="option.value" @mousedown="selectOption(option)"
                     class="px-5 py-2.5 hover:bg-grayscale-100 cursor-pointer "
-                    :class="[isActive(option) ? 'bg-brand-yellow-100 text-brand-yellow-500' : 'bg-grayscale-50 text-grayscale-500']">
+                    :class="[isActive(option) ? 'bg-purple-100 text-purple-500' : 'bg-grayscale-50 text-grayscale-500']">
                     {{ option.label }}
                 </li>
             </ul>

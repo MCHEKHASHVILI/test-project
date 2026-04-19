@@ -1,0 +1,50 @@
+@utility btn-primary {
+  @apply rounded-lg text-xl font-medium cursor-pointer text-grayscale-50 border-2 border-purple-500 bg-purple-500 transition-colors duration-200 py-3 px-4;
+
+  @variant hover {
+    @apply bg-purple-600 border-purple-600;
+  }
+  @variant active {
+    @apply bg-purple-700 border-purple-700;
+  }
+  @variant focus {
+    @apply bg-purple-600 outline-none ring-2 ring-purple-700;
+  }
+  @variant disabled {
+    @apply bg-grayscale-300 text-grayscale-400 cursor-not-allowed border-grayscale-300;
+  }
+}
+
+@utility btn-primary-sm {
+  @apply btn-primary p-3;
+}
+
+@utility btn-primary-lg {
+  @apply btn-primary py-4.25 px-6.25;
+}
+
+/* 2. Register Outline Utilities */
+@utility btn-outline {
+  @apply py-3 px-4 rounded-lg text-xl font-medium cursor-pointer text-purple-500 border-2 border-purple-300 transition-all duration-300;
+
+  @variant hover {
+    @apply bg-purple-600 text-grayscale-50 border-purple-600;
+  }
+  @variant active {
+    @apply bg-purple-700;
+  }
+  @variant focus {
+    @apply bg-purple-600 outline-none ring-2 ring-purple-700 border-2 border-dashed;
+  }
+  @variant disabled {
+    @apply bg-grayscale-300 border border-grayscale-400 text-grayscale-400 cursor-not-allowed;
+  }
+}
+
+@utility btn-outline-sm {
+  @apply btn-outline p-3;
+}
+
+@utility btn-outline-lg {
+  @apply btn-outline py-4.25 px-6.25;
+}

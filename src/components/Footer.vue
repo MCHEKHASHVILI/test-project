@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from './shared/Icon.vue'
+import BaseIcon from './shared/BaseIcon.vue'
 import AppLink from './shared/AppLink.vue'
 import { useFooter } from '@/composables/useFooter';
 
@@ -18,31 +18,31 @@ const {
                 <div class="w-full flex flex-col gap-4">
                     <div class="flex flex-row items-center space-x-3">
                         <RouterLink :to="{ name: 'home' }"
-                            class="flex items-center justify-center bg-brand-yellow-500 w-11.25 h-11.25 rounded-[14px]">
-                            <Icon name="ApplicationLogo" width="18.37" height="19" viewBox="0 0 32 33" />
+                            class="flex items-center justify-center bg-purple-500 w-11.25 h-11.25 rounded-[14px]">
+                            <BaseIcon name="ApplicationLogo" width="18.37" height="19" viewBox="0 0 32 33" />
                         </RouterLink>
-                        <span class="text-brand-yellow-800 text-2xl font-medium leading-none">Bootcamp</span>
+                        <span class="text-purple-800 text-2xl font-medium leading-none">Bootcamp</span>
                     </div>
                     <div>
                         <p>Your learning journey starts here!</p>
                         <p>Browse courses to get started.</p>
                     </div>
-                    <ul class="flex flex-row items-center justify-start space-x-5.5">
+                    <ul class="flex flex-row items-center justify-start space-x-5.5 text-purple-400">
                         <li v-for="link in socialLinks">
                             <RouterLink :to="link.url">
-                                <Icon :name="link.name" />
+                                <BaseIcon :name="link.name" />
                             </RouterLink>
                         </li>
                     </ul>
                 </div>
                 <div class="w-full flex flex-row gap-30">
                     <div class="w-full flex flex-col gap-6" v-for="section in footerMenus">
-                        <h3 class="text-brand-yellow-800 text-xl font-semibold leading-7" v-text="section.title" />
+                        <h3 class="text-purple-800 text-xl font-semibold leading-7" v-text="section.title" />
                         <ul class="text-grayscale-500 flex flex-col gap-2">
                             <li v-for="menuItem in section.menu">
                                 <AppLink :to="menuItem.url"
                                     :class="{ 'flex flex-row items-center space-x-1.5': !!menuItem.icon }">
-                                    <Icon v-if="!!menuItem.icon" :name="menuItem.icon" />
+                                    <BaseIcon v-if="!!menuItem.icon" :name="menuItem.icon" />
                                     <span v-text="menuItem.title" />
                                 </AppLink>
                             </li>
@@ -62,7 +62,7 @@ const {
                             <span v-if="!item.isLink" v-text="item.title"
                                 class="text-lg text-grayscale-500 font-normal leading-6.5" />
                             <RouterLink v-if="item.isLink" :to="item?.route" v-text="item.title"
-                                class="text-brand-yellow-500 font-normal leading-6.5" />
+                                class="text-purple-500 font-normal leading-6.5" />
                         </li>
                     </ul>
                 </nav>

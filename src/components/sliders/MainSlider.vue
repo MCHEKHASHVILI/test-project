@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import AppLink from '@/components/shared/AppLink.vue';
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/vue-splide'
 import '@splidejs/splide/css';
 import ArrowLeftSVGUrl from '@/assets/svg/ArrowLeft.svg?url'
 import ArrowRightSVGUrl from '@/assets/svg/ArrowRight.svg?url'
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const activeIndex = ref(0);
 const onMove = (splide: any, newIndex: any) => {
     activeIndex.value = newIndex;
@@ -11,7 +14,7 @@ const onMove = (splide: any, newIndex: any) => {
 const options = {
     rewind: true,
     arrows: true,
-    autoplay: false,
+    autoplay: true,
     interval: 3000,
     pagination: true,
 }
@@ -26,7 +29,7 @@ const slides = [
             'Explore a wide range of expert-led courses in design, development, business, and more. Find the skills you need to grow your career and learn at your own pace.',
         button: {
             title: 'Browse Courses',
-            routeName: 'courses',
+            url: router.resolve({ name: 'courses' }),
         },
     },
     {
@@ -38,7 +41,7 @@ const slides = [
             'Your learning journey is already in progress. Continue your enrolled courses, track your progress, and stay on track toward completing your goals.',
         button: {
             title: 'Start Learning',
-            routeName: 'courses',
+            url: router.resolve({ name: 'courses' }),
         },
     },
     {
@@ -50,7 +53,7 @@ const slides = [
             'Join a community of learners, connect with instructors, and stay motivated as you build new skills and advance your knowledge.',
         button: {
             title: 'Learn More',
-            routeName: 'courses',
+            url: router.resolve({ name: 'courses' }),
         },
     },
 ]
@@ -78,9 +81,9 @@ const onPaginationMounted = (splide: any, data: any) => {
                     <div class="relative flex flex-col items-start justify-between gap-3">
                         <h1 class="text-grayscale-50 text-5xl font-bold" v-text="slide.title" />
                         <p class="text-grayscale-50 text-xl font-light" v-text="slide.description" />
-                        <button v-if="slide.button"
-                            class="py-4 px-6.25 text-grayscale-50 text-xl font-medium bg-brand-yellow-500 rounded-lg cursor-pointer"
-                            v-text="slide.button.title" />
+                        <AppLink v-if="slide.button" :to="slide.button.url">
+                            <button class="btn-primary-lg" v-text="slide.button.title" />
+                        </AppLink>
                     </div>
                 </div>
             </SplideSlide>
@@ -163,12 +166,12 @@ const onPaginationMounted = (splide: any, data: any) => {
 :deep(.splide__arrows) {
     position: absolute;
     right: 54px;
-    width: 132px;
+    width: 152px;
     top: 20%;
     transform: translateY(-50%);
     display: flex;
     flex-direction: row-reverse;
-    gap: 24px;
+    gap: 34px;
     justify-content: space-between;
     height: 54px;
 }

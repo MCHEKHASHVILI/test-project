@@ -1,0 +1,13 @@
+@layer components {
+  .nav-link {
+    @apply w-full flex items-center justify-between gap-2 p-3.75 rounded-lg text-xl font-medium text-grayscale-600 hover:text-purple-500 transform duration-300 transition-all;
+  }
+
+  .breadcrumb-item {
+    @apply text-grayscale-500 text-lg font-medium leading-none;
+    a {
+      @apply group-hover:text-purple-400;
+      @apply transform duration-300 transition-all;
+    }
+  }
+}

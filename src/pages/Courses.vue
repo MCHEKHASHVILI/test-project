@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
-import Icon from '@/components/shared/Icon.vue'
+import BaseIcon from '@/components/shared/BaseIcon.vue'
 import BrowseCourseCard from '@/components/cards/BrowseCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
@@ -54,8 +54,8 @@ onMounted(() => {
         <button
           class="w-full flex flex-row items-center justify-end space-x-1.5 cursor-pointer text-grayscale-400 group"
           @click="clearFilters">
-          <span class="font-medium leading-6 group-hover:text-brand-yellow-400">Clear All Filters</span>
-          <Icon name="XIcon" class="group-hover:[&_path]:stroke-brand-yellow-400" />
+          <span class="font-medium leading-6 group-hover:text-purple-400">Clear All Filters</span>
+          <BaseIcon name="XIcon" class="group-hover:[&_path]:stroke-purple-400" />
         </button>
       </div>
       <div v-if="courses" class="w-291.75 flex flex-row items-center justify-between">

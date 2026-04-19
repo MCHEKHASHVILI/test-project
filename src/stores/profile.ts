@@ -2,6 +2,8 @@ import { defineStore, storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import apiClient from '@/api/apiClient'
 import { useAuthStore } from './auth'
+import { useModalStore } from './modals'
+import axios from 'axios'
 
 export const useProfileStore = defineStore('profile', () => {
   // State
@@ -9,6 +11,7 @@ export const useProfileStore = defineStore('profile', () => {
   const mobileNumber = ref<string | null>(null)
   const age = ref<number | null>(null)
   const avatar = ref<File | null>(null)
+  const validationErrors = ref()
 
   const authStore = useAuthStore()
   const { user } = storeToRefs(authStore)
@@ -43,6 +46,12 @@ export const useProfileStore = defineStore('profile', () => {
     }
   })
 
+  const ageOptions = computed(() =>
+    Array.from({ length: 120 }, (_, i) => {
+      return { value: i, label: i }
+    }).filter((value) => value.value > 18),
+  )
+
   // Actions
   async function fetchProfile() {
     try {
@@ -65,22 +74,42 @@ export const useProfileStore = defineStore('profile', () => {
     formData.append('mobile_number', mobileNumber.value || '')
     formData.append('age', age.value !== null ? age.value.toString() : '')
     if (avatar.value instanceof File) formData.append('avatar', avatar.value)
-    const response = await apiClient.put('profile', formData, {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${authStore.token}`,
-      },
-    })
-    if (!response.ok) {
+    try {
+      const response = await apiClient.put('profile', formData, {
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      })
+      if (!response.ok) {
+        return false
+      }
+      user.value = response.data.data
+
+      localStorage.setItem('user', JSON.stringify(response.data.data))
+
+      const modalStore = useModalStore()
+      const { closeModal } = modalStore
+      closeModal()
+
+      return true
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        const message = error.response?.data?.message || error.message
+        if (status === 422) {
+          validationErrors.value = error.response?.data?.errors
+          return false
+        }
+        console.error(`API Error (${status}): ${message}`)
+      } else {
+        console.error('An unexpected error occurred:', error)
+      }
       return false
+    } finally {
+      // ...
     }
-
-    user.value = response.data.data
-
-    localStorage.setItem('user', JSON.stringify(response.data.data))
-
-    return true
   }
 
   return {
@@ -94,5 +123,7 @@ export const useProfileStore = defineStore('profile', () => {
     email,
     fetchProfile,
     updateProfile,
+    ageOptions,
+    validationErrors,
   }
 })

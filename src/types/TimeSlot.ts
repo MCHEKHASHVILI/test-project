@@ -3,4 +3,5 @@ export interface TimeSlot {
   label: string
   startTime: string
   endTime: string
+  icon?: string
 }

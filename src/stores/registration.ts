@@ -1,6 +1,9 @@
 import { ref } from 'vue'
+import axios from 'axios'
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
+import { useModalStore } from './modals'
+import apiClient from '@/api/apiClient'
 
 export const useRegistrationStore = defineStore('registration', () => {
   const authStore = useAuthStore()
@@ -13,6 +16,7 @@ export const useRegistrationStore = defineStore('registration', () => {
   const passwordConfirmation = ref<string | null>(null)
   const userName = ref<string | null>(null)
   const avatar = ref<File | null>(null)
+  const validationErrors = ref()
 
   // Actions
   async function register() {
@@ -22,15 +26,36 @@ export const useRegistrationStore = defineStore('registration', () => {
     formData.append('password_confirmation', passwordConfirmation.value || '')
     formData.append('username', userName.value || '')
     if (avatar.value instanceof File) formData.append('avatar', avatar.value)
-    const response = await authStore.register(formData)
-    if (!response.ok) {
+    try {
+      const response = await apiClient.post('register', formData)
+      if (!response.ok) {
+        return false
+      }
+      const { data } = response.data
+      authStore.authenticate(data)
+      reset()
+      const modalStore = useModalStore()
+      const { closeModal } = modalStore
+      closeModal()
+      return true
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status
+        const message = error.response?.data?.message || error.message
+        if (status === 422) {
+          validationErrors.value = error.response?.data?.errors
+          return false
+        }
+        console.error(`API Error (${status}): ${message}`)
+      } else {
+        console.error('An unexpected error occurred:', error)
+      }
       return false
+    } finally {
+      // ...
     }
-    const { data } = response.data
-    authStore.authenticate(data)
-    reset()
-    return true
   }
+
   function nextStep() {
     if (currentStep.value < totalSteps.value) {
       currentStep.value = currentStep.value + 1
@@ -43,9 +68,9 @@ export const useRegistrationStore = defineStore('registration', () => {
   }
 
   function getStepBgColor(index: number): string {
-    let color = currentStep.value === index ? 'bg-brand-yellow-200' : 'bg-brand-yellow-50'
-    color = currentStep.value > index ? 'bg-brand-yellow-500' : color
-    color = currentStep.value < index - 1 ? 'bg-brand-yellow-50' : color
+    let color = currentStep.value === index ? 'bg-purple-200' : 'bg-purple-50'
+    color = currentStep.value > index ? 'bg-purple-500' : color
+    color = currentStep.value < index - 1 ? 'bg-purple-50' : color
     return color
   }
 
@@ -66,6 +91,7 @@ export const useRegistrationStore = defineStore('registration', () => {
     passwordConfirmation,
     userName,
     avatar,
+    validationErrors,
     register,
     prevStep,
     nextStep,

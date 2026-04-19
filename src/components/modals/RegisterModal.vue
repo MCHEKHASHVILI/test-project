@@ -1,46 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BaseModal from './BaseModal.vue'
+import BaseModal from '@/layouts/modals/BaseModal.vue'
 import CreateAccountForm from '../form/CreateAccountForm.vue'
 import { useRegistrationStore } from '@/stores/registration'
 import { storeToRefs } from 'pinia'
-import Icon from '../shared/Icon.vue'
+import BaseIcon from '../shared/BaseIcon.vue'
+import { useModalStore } from '@/stores/modals'
 
-const isOpen = ref<boolean>(false)
+const modalStore = useModalStore()
+// const { isOpen } = storeToRefs(modalStore)
 
-function close(): void {
-    isOpen.value = false
-}
-function open(): void {
-    isOpen.value = true
-}
-
-defineExpose({ open })
-const emit = defineEmits(['toLogIn'])
-
-function openLoginModal() {
-    close()
-    emit('toLogIn')
-}
-
+const { activeModal } = storeToRefs(modalStore)
 const registrationStore = useRegistrationStore()
+const { register } = registrationStore
 const { currentStep } = storeToRefs(registrationStore)
-async function createAccount(): Promise<void> {
-    const success = await registrationStore.register()
-
-    if (success) {
-        close()
-    }
-}
 
 </script>
 <template>
-    <BaseModal :isOpen="isOpen" :title="'Create Account'" :subtitle="'Join and start learning today'" @close="close">
+    <BaseModal :isOpen="!!activeModal" :title="'Create Account'" :subtitle="'Join and start learning today'"
+        @close="$emit('close')">
         <template #back>
             <button v-if="currentStep > 1" class="cursor-pointer" @click="registrationStore.prevStep">
-                <Icon name="BackIcon" class="rotate-180" />
+                <BaseIcon name="BackIcon" class="rotate-180" />
             </button>
         </template>
-        <CreateAccountForm @submit="createAccount" @toLogIn="openLoginModal" />
+        <CreateAccountForm @submit="register" />
     </BaseModal>
 </template>

@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import TextInput from './TextInput.vue'
 import FileInput from './FileInput.vue'
-import FileUploadIdle from '../shared/FileUploadIdle.vue'
+import FileUploadIdle from '@/components/shared/FileUploadIdle.vue'
+import AppLink from '@/components/shared/AppLink.vue'
 import { useRegistrationStore } from '@/stores/registration'
 import { storeToRefs } from 'pinia'
-
-const emit = defineEmits(['submit', 'toLogIn'])
-const submitForm = () => { emit('submit') }
-
 const registrationStore = useRegistrationStore()
-const { currentStep, totalSteps, email, password, passwordConfirmation, userName, avatar } = storeToRefs(registrationStore)
+const { currentStep, totalSteps, email, password, passwordConfirmation, userName, avatar, validationErrors } = storeToRefs(registrationStore)
 </script>
-
 <template>
     <div class="flex flex-col space-y-6">
         <!-- Progress Indicator -->
@@ -24,30 +20,30 @@ const { currentStep, totalSteps, email, password, passwordConfirmation, userName
         <form class="modal" @submit.prevent>
             <!-- Step 1 -->
             <div v-if="currentStep === 1">
-                <TextInput type="email" label="Email*" v-model="email" placeholder="You@example.com" />
+                <TextInput type="email" label="Email*" v-model="email" placeholder="You@example.com"
+                    :errors="validationErrors?.email" />
             </div>
 
             <!-- Step 2 -->
             <div v-else-if="currentStep === 2" class="flex flex-col gap-6">
-                <TextInput type="text" label="Password*" autocomplete="off" icon="eye" v-model="password" />
+                <TextInput type="text" label="Password*" autocomplete="off" icon="eye" v-model="password"
+                    :errors="validationErrors?.password" />
                 <TextInput type="password" label="Confirm Password*" autocomplete="off" icon="eye-off"
-                    v-model="passwordConfirmation" />
+                    v-model="passwordConfirmation" :errors="validationErrors?.password" />
             </div>
 
             <!-- Step 3 -->
             <div v-else-if="currentStep === 3" class="flex flex-col gap-6">
-                <TextInput type="text" label="UserName*" v-model="userName" />
+                <TextInput type="text" label="UserName*" v-model="userName" :errors="validationErrors?.username" />
                 <FileInput label="Upload Avatar" :idle_component="FileUploadIdle" v-model="avatar"
                     accepted-file-types="image/jpeg, image/png, image/webp" :allow-multiple="false" />
             </div>
 
             <!-- Navigation -->
             <div class="mt-8 flex justify-between">
-                <!-- <button v-if="currentStep > 1" @click="prevStep"
-                    class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Back</button> -->
                 <button v-if="currentStep < totalSteps" @click.prevent="registrationStore.nextStep"
                     class="w-full btn-primary p-2.5">Next</button>
-                <button v-else class="w-full btn-primary p-2.5" @click="submitForm">Create Account</button>
+                <button v-else class="w-full btn-primary p-2.5" @click="$emit('submit')">Create Account</button>
             </div>
         </form>
         <div class="flex items-center">
@@ -58,9 +54,10 @@ const { currentStep, totalSteps, email, password, passwordConfirmation, userName
         <div class="flex items-center space-x-2 justify-center">
             <span class="text-[12px] text-grayscale-500 lowercase first-letter:uppercase">Already have an
                 account?</span>
-            <a class="text-[14px] text-grayscale-900 font-medium text-center underline decoration-solid underline-offset-[25%] decoration-[0%] cursor-pointer"
-                @click="$emit('toLogIn')">
-                Log in</a>
+            <AppLink :to="{ name: 'action.modal', params: { name: 'LogInModal' } }"
+                class="text-[14px] text-grayscale-900 font-medium text-center underline decoration-solid underline-offset-[25%] decoration-[0%] cursor-pointer">
+                Log in
+            </AppLink>
         </div>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import Icon from '../shared/Icon.vue';
+import BaseIcon from '@/components/shared/BaseIcon.vue'
 import { onClickOutside } from '@vueuse/core'
 const modalRef = ref(null);
 const props = defineProps({ isOpen: Boolean, title: String, subtitle: String });
@@ -20,8 +20,8 @@ onClickOutside(modalRef, () => {
     <Teleport to="body">
         <Transition enter-active-class="duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
             leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <div v-if="isOpen" class="fixed inset-0 z-50 flex items-start justify-center bg-black/25 ">
-                <div class="relative top-20 bg-grayscale-50 rounded-lg max-w-115 p-12.5 w-full transform transition-all"
+            <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black-light ">
+                <div class="relative bg-grayscale-50 rounded-lg max-w-125 p-12.5 w-full transform transition-all"
                     ref="modalRef">
                     <div class="absolute top-8 left-0 px-8 w-full h-auto">
                         <div class="flex flex-row justify-between">
@@ -29,14 +29,19 @@ onClickOutside(modalRef, () => {
                                 <slot name="back" />
                             </div>
                             <div class="shrink">
-                                <button class="cursor-pointer" @click="$emit('close')">
-                                    <Icon name="XIcon" />
-                                </button>
+                                <slot name="exit">
+                                    <button class="cursor-pointer" @click="$emit('close')">
+                                        <BaseIcon name="XIcon" />
+                                    </button>
+                                </slot>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-col">
                         <div class="flex flex-col">
+                            <div class="flex flex-row items-center-justify-around">
+                                <slot name="icon"></slot>
+                            </div>
                             <div v-if="title" class="flex flex-row items-center justify-around">
                                 <h2 class="text-[32px] text-grayscale-900 font-semibold capitalize" v-text="title" />
                             </div>

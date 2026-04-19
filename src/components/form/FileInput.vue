@@ -2,9 +2,10 @@
 import { ref, nextTick, watch } from 'vue';
 import vueFilePond, { setOptions } from 'vue-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import 'filepond/dist/filepond.min.css';
 
-const FilePond = (vueFilePond.default || vueFilePond)(FilePondPluginFileValidateType);
+const FilePond = (vueFilePond.default || vueFilePond)(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 const props = defineProps(['label', 'idle_component']);
 
 const pond = ref(null);
@@ -16,10 +17,24 @@ const handlePondInit = () => {
 };
 
 const myFile = ref([])
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue'])
+
+const errorMessage = ref(null); // Store the current error message
 
 const handleFileAdded = (error, item) => {
-    if (error) return
+    // Reset error on every attempt
+    errorMessage.value = null;
+
+    if (error) {
+        // error.main: "File is too large" or "File is of invalid type"
+        // error.sub: "Maximum file size is 5MB"
+        errorMessage.value = `${error.main}: ${error.sub}`;
+
+        // Remove the invalid file from Pond so the user can try again
+        // Otherwise, it stays in the internal list hidden by your CSS
+        pond.value.removeFile(item.id);
+        return;
+    }
     uploadedFile.value = {
         id: item.id,
         name: item.filename,
@@ -33,7 +48,7 @@ const handleFileRemoved = () => {
 };
 
 const triggerBrowse = () => {
-    // Removes current and opens file browser
+    errorMessage.value = null;
     if (uploadedFile.value) {
         pond.value.removeFile(uploadedFile.value.id);
     }
@@ -42,7 +57,8 @@ const triggerBrowse = () => {
 
 setOptions({
     instantUpload: false,
-    allowMultiple: false // Assuming circle profile style is single-file
+    allowMultiple: false, // Assuming circle profile style is single-file
+    maxFileSize: '1MB' // Set your desired limit here
 })
 
 function formatFileSize(bytes, decimals = 2) {
@@ -91,12 +107,19 @@ watch(myFile, () => {
                     </button>
                 </div>
             </div>
-
-            <!-- Idle Slot (Only show when empty) -->
             <Teleport v-if="isPondReady && !uploadedFile" to=".filepond--drop-label">
                 <div class="custom-content-overlay">
-                    <slot v-if="!props.idle_component" name="idle" />
-                    <component v-else :is="props.idle_component" />
+                    <!-- Show error if it exists -->
+                    <div v-if="errorMessage" class="error-box">
+                        <span class="error-text">{{ errorMessage }}</span>
+                        <button @click="errorMessage = null" class="error-close">✕</button>
+                    </div>
+
+                    <!-- Only show normal idle content if no error, or show both -->
+                    <template v-if="!errorMessage">
+                        <slot v-if="!props.idle_component" name="idle" />
+                        <component v-else :is="props.idle_component" />
+                    </template>
                 </div>
             </Teleport>
         </div>
@@ -180,5 +203,32 @@ watch(myFile, () => {
 /* Hide default FilePond items always */
 :deep(.filepond--item) {
     display: none;
+}
+
+
+/** Error message styling */
+.error-box {
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-text {
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.error-close {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
 }
 </style>

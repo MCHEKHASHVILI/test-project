@@ -36,6 +36,21 @@ const routes = [
       },
     ],
   },
+  /**
+   * Action Routes
+   */
+  {
+    path: '/action/modal/:name',
+    name: 'action.modal',
+    component: { render: () => null },
+    meta: {
+      // Define the guest-only modals directly in the route
+      guestOnlyModals: ['LogInModal', 'RegisterModal'],
+    },
+  },
+  /**
+   * Page not Found 404
+   */
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',

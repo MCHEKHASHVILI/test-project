@@ -1,0 +1,38 @@
+@layer components {
+  form.modal {
+    @apply flex flex-col gap-6;
+  }
+  .input-group {
+    @apply flex flex-col gap-2 w-full;
+  }
+
+  .input-group label {
+    @apply text-sm font-medium text-grayscale-700 capitalize;
+  }
+  .input-group input {
+    @apply w-full py-3 pl-3.25 pr-3.75 text-sm border-[1.5px] border-grayscale-200 rounded-lg bg-transparent;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  .custom-radio {
+    /* Layout & Sizing */
+    @apply aspect-square flex-1 flex items-center justify-center p-3.75;
+
+    /* Base Styles */
+    @apply rounded-xl border border-grayscale-200 bg-grayscale-50 text-grayscale-800;
+
+    /* Transitions */
+    @apply transition-all duration-500 ease-in-out transform;
+
+    /* Interaction States (Checked & Hover) */
+    @apply peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500;
+    @apply peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500;
+
+    /* Disabled State */
+    @apply peer-disabled:bg-grayscale-100 peer-disabled:border-grayscale-200 peer-disabled:cursor-not-allowed;
+  }
+}

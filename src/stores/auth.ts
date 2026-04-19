@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import apiClient from '@/api/apiClient'
 import { UserAuthenticationForm, UserProfile } from '@types'
+import { useModalStore } from './modals'
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -12,21 +13,27 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && token.value !== null)
+  const isAuthorized = computed(
+    () => user.value && Object.keys(user.value).length && user.value.profileComplete,
+  )
 
   // Actions
-  async function register(userRegistrationForm: FormData) {
-    const response = await apiClient.post('register', userRegistrationForm)
-    return response
-  }
-
-  async function login(credentials: UserAuthenticationForm) {
+  async function login(): Promise<void> {
+    const credentials: UserAuthenticationForm = {
+      email: email.value,
+      password: password.value,
+    }
     const response = await apiClient.post('login', credentials)
     if (!response.ok) {
-      return false
+      // Show Error Messages
+
+      return
     }
     const { data } = response.data
     authenticate(data)
-    return true
+    const modalStore = useModalStore()
+    const { closeModal } = modalStore
+    closeModal()
   }
 
   function authenticate(data: { user: UserProfile; token: string }) {
@@ -50,10 +57,10 @@ export const useAuthStore = defineStore('auth', () => {
     password,
     user,
     token,
-    isAuthenticated,
-    register,
     login,
     logout,
     authenticate,
+    isAuthorized,
+    isAuthenticated,
   }
 })

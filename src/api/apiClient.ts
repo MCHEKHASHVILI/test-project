@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { InternalAxiosRequestConfig } from 'axios'
+import { useAuthStore } from '@/stores/auth'
 
 declare module 'axios' {
   export interface AxiosResponse<T = any, D = any> {
@@ -12,6 +13,18 @@ const apiClient = axios.create({
     accept: 'application/json',
   },
 })
+
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    const authStore = useAuthStore()
+    // ONLY add header if requiresAuth is NOT explicitly set to false
+    if (config.requiresAuth !== false && authStore.isAuthenticated) {
+      config.headers.Authorization = `Bearer ${authStore.token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error),
+)
 
 apiClient.interceptors.response.use(
   (response) => {

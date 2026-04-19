@@ -5,6 +5,11 @@ const footerMenus = [
     title: 'Explore',
     menu: [
       {
+        title: 'Enrolled Courses',
+        url: router.resolve({ name: 'action.modal', params: { name: 'EnrolledCoursesModal' } }),
+        icon: '',
+      },
+      {
         title: 'Browse Courses',
         url: router.resolve({ name: 'courses' }),
         icon: '',
@@ -16,12 +21,12 @@ const footerMenus = [
     menu: [
       {
         title: 'Sign Up',
-        url: '',
+        url: router.resolve({ name: 'action.modal', params: { name: 'RegisterModal' } }),
         icon: '',
       },
       {
         title: 'Log In',
-        url: '',
+        url: router.resolve({ name: 'action.modal', params: { name: 'LogInModal' } }),
         icon: '',
       },
     ],

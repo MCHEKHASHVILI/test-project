@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import Icon from '@/components/shared/Icon.vue'
+import BaseIcon from '@/components/shared/BaseIcon.vue'
 import AppLink from '../shared/AppLink.vue';
 import { Course } from '@/types'
 defineProps<{ course: Course }>()
 </script>
 <template>
-    <div class="w-full bg-grayscale-50 rounded-lg border-b border-grayscale-100 p-5">
+    <div class="card card-dashboard">
         <div class="flex flex-col justify-between gap-4 h-full">
             <img class="h-65.5 w-full object-cover rounded-[10px]" :src="course.image" :alt="course.title" />
             <div class="flex flex-row justify-between items-center">
                 <small class="text-sm font-medium text-grayscale-500 w-full">Lecturer {{ course.instructor.name
                     }}</small>
                 <div class="flex items-center gap-1 w-full justify-end">
-                    <Icon name="Star" alt="Average Rating" class="w-4 h-4" />
+                    <BaseIcon name="Star" alt="Average Rating" width="16" height="16" class="text-star-dark" />
                     <span class="text-sm font-medium text-grayscale-600">{{ course.avgRating }}</span>
                 </div>
             </div>

@@ -3,16 +3,10 @@ import IconSetSvg from '@/assets/svg/Icon_Set.svg?raw'
 import { computed } from 'vue'
 
 /**
- * BaseIcon – renders a single icon from Icon_Set.svg by cropping its viewBox.
- *
- * Each entry in ICON_MAP defines the (x, y, w, h) crop window inside the
- * 364×369 master sprite.  The component injects that window as the <svg>
- * viewBox so the browser shows only that icon, regardless of the width/height
- * props you pass in.
- *
- * Usage:
- *   <BaseIcon name="calendar" width="24" height="24" />
- *   <BaseIcon name="star"     :width="32" :height="32" class="text-yellow-500" />
+ * BaseIcon – Hybrid Icon Component
+ * 1. Supports "Sprite Mode": Crops specific icons from Icon_Set.svg using ICON_MAP.
+ * 2. Supports "Standalone Mode": Automatically loads any .svg file from @/assets/svg/ 
+ *    based on the 'name' prop.
  */
 
 interface IconDef {
@@ -22,13 +16,13 @@ interface IconDef {
     h: number
 }
 
-/**
- * Icon registry – (x, y, w, h) crop windows inside the 364×369 sprite.
- * The sprite is laid out in a 7-column × 6-row grid.
- * Column centres: ~32, ~82, ~132, ~182, ~232, ~283, ~332
- * Row centres:    ~32, ~93, ~156, ~217, ~276, ~336
- * Every icon fits inside a 22×22 box.
- */
+// 1. Bulk import all standalone SVGs from the assets folder as raw strings
+const standaloneIcons = import.meta.glob('@/assets/svg/*.svg', {
+    query: '?raw',
+    import: 'default',
+    eager: true
+}) as Record<string, string>
+
 const ICON_MAP: Record<string, IconDef> = {
     // ── Row 1 ─────────────────────────────────────────────
     calendar: { x: 22, y: 20, w: 20, h: 22 },
@@ -73,47 +67,83 @@ const ICON_MAP: Record<string, IconDef> = {
     star: { x: 122, y: 324, w: 24, h: 24 },
 }
 
-const props = withDefaults(
-    defineProps<{
-        name: string
-        width?: number | string
-        height?: number | string
-        color?: string
-        title?: string
-    }>(),
-    {
-        width: 20,
-        height: 20,
-    }
-)
+const props = defineProps<{
+    name: string
+    width?: number | string
+    height?: number | string
+    title?: string
+}>()
 
-const icon = computed(() => ICON_MAP[props.name])
+const isSpriteIcon = computed(() => props.name in ICON_MAP)
 
 /**
- * Parse the inner content of Icon_Set.svg – everything between <svg …> and </svg>.
- * We strip the outer <svg> wrapper and re-render only the paths/groups, so the
- * host <svg> element controls viewBox/dimensions.
+ * Extracts inner content and viewBox from either the sprite or standalone file
  */
-const svgInner = computed(() => {
-    const match = IconSetSvg.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)
-    return match ? match[1] : ''
+const iconData = computed(() => {
+    let rawContent = ''
+    let foundViewBox: string | null = null
+
+    if (isSpriteIcon.value) {
+        const match = IconSetSvg.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)
+        rawContent = match ? match[1] : '' // Ensure you grab match[1]
+    } else {
+        const path = `/src/assets/svg/${props.name}.svg`
+        const fileString = standaloneIcons[path]
+
+        if (fileString) {
+            const vbMatch = fileString.match(/viewBox="([^"]+)"/)
+            if (vbMatch) foundViewBox = vbMatch[1] // Ensure you grab vbMatch[1]
+
+            const innerMatch = fileString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)
+            rawContent = innerMatch ? innerMatch[1] : ''
+        }
+    }
+
+    // IMPROVED REPLACEMENT LOGIC:
+    // 1. Replace hex strokes with currentColor
+    // 2. Replace hex fills with currentColor
+    // 3. Optional: If the icon is "invisible" because it's only fill="none", 
+    //    we convert those to currentColor too if they aren't masks.
+    const cleanedContent = rawContent
+        .replace(/stroke="#[a-zA-Z0-9]+"/g, 'stroke="currentColor"')
+        .replace(/fill="#[a-zA-Z0-9]+"/g, 'fill="currentColor"')
+    // This specific Stars icon uses fill="white" in the mask. 
+    // We must NOT replace white inside masks, or the mask breaks.
+    // If the stars are still invisible, try adding:
+    // .replace(/fill="none"/g, 'fill="currentColor"') 
+
+    return { content: cleanedContent, viewBox: foundViewBox }
 })
 
 /**
- * Build a viewBox string from the icon definition, adding a small 1px padding
- * so stroked paths on the edge are not clipped.
+ * Calculates viewBox: Manual crop for sprite icons, extracted VB for standalone.
  */
 const viewBox = computed(() => {
-    if (!icon.value) return '0 0 20 20'
-    const pad = 1
-    const { x, y, w, h } = icon.value
-    return `${x - pad} ${y - pad} ${w + pad * 2} ${h + pad * 2}`
+    if (isSpriteIcon.value) {
+        const pad = 1
+        const { x, y, w, h } = ICON_MAP[props.name]
+        return `${x - pad} ${y - pad} ${w + pad * 2} ${h + pad * 2}`
+    }
+    return iconData.value.viewBox || '0 0 24 24'
 })
 </script>
 
 <template>
-    <svg v-if="icon" :width="width" :height="height" :viewBox="viewBox" :aria-label="title ?? name"
-        :role="title ? 'img' : 'presentation'" xmlns="http://www.w3.org/2000/svg" fill="none" v-html="svgInner" />
-    <span v-else :style="{ display: 'inline-block', width: `${width}px`, height: `${height}px` }"
+    <svg v-if="iconData.content" :width="width" :height="height" :viewBox="viewBox" :aria-label="title ?? name"
+        :role="title ? 'img' : 'presentation'" xmlns="http://w3.org" fill="none" preserveAspectRatio="xMidYMid meet"
+        class="base-icon" v-html="iconData.content" />
+    <span v-else
+        :style="{ display: 'inline-block', width: width ? `${width}px` : '1.25rem', height: height ? `${height}px` : '1.25rem' }"
         :title="`Unknown icon: ${name}`" />
 </template>
+
+<style scoped>
+.base-icon {
+    /* Responsive sizing logic: props take priority, else fallback to 1.25rem (w-5) */
+    width: v-bind("width ? 'auto' : '1.25rem'");
+    height: v-bind("height ? 'auto' : '1.25rem'");
+    stroke: currentColor;
+    display: inline-block;
+    vertical-align: middle;
+}
+</style>
