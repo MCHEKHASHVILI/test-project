@@ -1,0 +1,124 @@
+/** Display **/
+@utility text-display-xl {
+  @apply text-[48px];
+  @apply font-bold;
+  @apply leading-none;
+  @apply tracking-[-0.5%];
+}
+/** Headings */
+@utility text-heading-1 {
+  @apply text-[40px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-[-0.5%];
+}
+@utility text-heading-2 {
+  @apply text-[32px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-heading-3 {
+  @apply text-[24px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-heading-4 {
+  @apply text-[20px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+/** Body */
+@utility text-body-light-xl {
+  @apply text-[24px];
+  @apply font-light;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-body-xl {
+  @apply text-[24px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-body-l {
+  @apply text-[20px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-body-m {
+  @apply text-[18px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-body-s {
+  @apply text-[16px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-body-xs {
+  @apply text-[14px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+/** Micro Text */
+@utility text-helper-medium {
+  @apply text-[12px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-[0.5%];
+}
+@utility text-helper-regular-m {
+  @apply text-[12px];
+  @apply font-normal;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-helper-regular-s {
+  @apply text-[12px];
+  @apply font-normal;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-helper-regular-xs {
+  @apply text-[12px];
+  @apply font-normal;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+/** Underlined */
+@utility text-underlined-m {
+  @apply text-[20px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+  @apply underline;
+  @apply decoration-solid;
+}
+@utility text-underlined-s {
+  @apply text-[18px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+  @apply underline;
+  @apply decoration-solid;
+}
+/** Buttons */
+@utility text-button-m {
+  @apply text-[20px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}
+@utility text-button-s {
+  @apply text-[16px];
+  @apply font-medium;
+  @apply leading-none;
+  @apply tracking-normal;
+}

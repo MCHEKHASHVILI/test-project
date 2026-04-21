@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import BaseIcon from '@/components/shared/BaseIcon.vue'
+import IconLoader from '@/components/shared/IconLoader.vue'
 import { onClickOutside } from '@vueuse/core'
 const modalRef = ref(null);
 const props = defineProps({ isOpen: Boolean, title: String, subtitle: String });
@@ -30,8 +30,9 @@ onClickOutside(modalRef, () => {
                             </div>
                             <div class="shrink">
                                 <slot name="exit">
-                                    <button class="cursor-pointer" @click="$emit('close')">
-                                        <BaseIcon name="XIcon" />
+                                    <button class="cursor-pointer text-[13.2px] text-grayscale-400"
+                                        @click="$emit('close')">
+                                        <IconLoader name="XIcon" />
                                     </button>
                                 </slot>
                             </div>

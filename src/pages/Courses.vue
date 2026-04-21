@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
 import BaseIcon from '@/components/shared/BaseIcon.vue'
+import IconLoader from '@/components/shared/IconLoader.vue'
 import BrowseCourseCard from '@/components/cards/BrowseCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
@@ -50,17 +51,17 @@ onMounted(() => {
     <RouterBreadCrumbs />
     <div class="wrapper flex flex-row gap-22.5">
       <div class="w-77.25 flex flex-row items-center justify-between">
-        <h1 class="w-full text-[40px] font-semibold text-grayscale-950">Filters</h1>
+        <h1 class="text-heading-1 text-grayscale-950">Filters</h1>
         <button
-          class="w-full flex flex-row items-center justify-end space-x-1.5 cursor-pointer text-grayscale-400 group"
+          class="w-full flex flex-row items-center justify-end gap-1.5 cursor-pointer text-grayscale-400 hover:text-purple-400 text-body-s"
           @click="clearFilters">
-          <span class="font-medium leading-6 group-hover:text-purple-400">Clear All Filters</span>
-          <BaseIcon name="XIcon" class="group-hover:[&_path]:stroke-purple-400" />
+          <span>Clear All Filters</span>
+          <IconLoader name="XIcon" />
         </button>
       </div>
       <div v-if="courses" class="w-291.75 flex flex-row items-center justify-between">
         <span class="text-grayscale-500 font-medium">Showing {{ courses.data.length }} out of {{ courses.meta.total
-        }}</span>
+          }}</span>
         <SelectSort v-model="sort" :options="sortOptions" />
       </div>
     </div>
@@ -71,21 +72,21 @@ onMounted(() => {
             <h4 class="text-lg text-grayscale-500 font-medium">Categories</h4>
             <div class="flex flex-wrap gap-2">
               <FilterCheckBox v-for="item in categories" :data="item" v-model="filters.categories" :key="item.id"
-                :value="item.id" />
+                :value="item.id" class="chips-checkbox" />
             </div>
           </section>
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">Topics</h4>
             <div class="flex flex-wrap gap-2">
               <FilterCheckBox v-for="item in filteredTopics" :data="item" v-model="filters.topics" :key="item.id"
-                :value="item.id" />
+                :value="item.id" class="chips-checkbox" />
             </div>
           </section>
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">instructor</h4>
             <div class="flex flex-col gap-2">
               <FilterCheckBox v-for="item in instructors" :data="item" v-model="filters.instructors" :key="item.id"
-                :value="item.id" />
+                :value="item.id" class="chips-checkbox" />
             </div>
           </section>
         </div>

@@ -144,6 +144,18 @@ watch(myFile, () => {
     padding: 30px;
 }
 
+:deep(.filepond--drop-label):hover {
+    background: var(--color-purple-50);
+    border: 1.5px solid var(--purple-100);
+    border-radius: 8px;
+}
+
+:deep(.filepond--drop-label):active {
+    background: var(--color-purple-100);
+    border: 1.5px solid var(--purple-200);
+    border-radius: 8px;
+}
+
 /* New Circle Preview Styles */
 .custom-circle-view {
     min-height: 140px;

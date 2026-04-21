@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import BaseIcon from '../shared/BaseIcon.vue'
+import IconLoader from '../shared/IconLoader.vue';
 
 import { Category, Topic, Instructor } from "@types"
 
@@ -26,17 +27,11 @@ const toggleCheckbox = (event: any) => {
 
 </script>
 <template>
-    <label class="box-border inline-flex items-center cursor-pointer">
-
-        <input type="checkbox" class="sr-only peer" :value="value" :checked="isChecked" @change="toggleCheckbox" />
-
-        <div class="w-fit flex flex-row space-x-2.5 items-center bg-grayscale-50 rounded-xl py-2 px-3 border text-grayscale-500"
-            :class="[isChecked ? 'border-purple-400' : 'border-transparent']">
-            <BaseIcon v-if="'icon' in data" :name="data.icon" class="text-grayscale-600" />
-            <div v-if="'avatar' in data" class="w-7.5 h-7.5 rounded-sm overflow-hidden">
-                <img :src="data.avatar" class="w-full h-full rounded-sm object-cover" />
-            </div>
-            <span>{{ data.name }}</span>
-        </div>
+    <label>
+        <input type="checkbox" class="sr-only" :value="value" :checked="isChecked" @change="toggleCheckbox" />
+        <!-- <BaseIcon v-if="'icon' in data" :name="data.icon" /> -->
+        <IconLoader v-if="'icon' in data" :name="data.icon" />
+        <img v-if="'avatar' in data" :src="data.avatar" />
+        <span v-text="data.name" />
     </label>
 </template>

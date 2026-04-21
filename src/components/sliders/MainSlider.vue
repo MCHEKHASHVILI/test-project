@@ -15,8 +15,10 @@ const options = {
     rewind: true,
     arrows: true,
     autoplay: true,
-    interval: 3000,
     pagination: true,
+    interval: 3000,
+    transition: 500,
+    easing: 'ease-out',
 }
 
 const slides = [
@@ -75,14 +77,14 @@ const onPaginationMounted = (splide: any, data: any) => {
         @splide:pagination:mounted="onPaginationMounted" @splide:move="onMove">
         <SplideTrack class="h-105 rounded-[30px]">
             <SplideSlide v-for="slide in slides" :key="slide.id" class="h-105">
-                <div class="relative h-105 w-full overflow-hidden p-12">
+                <div class="relative h-105 w-full overflow-hidden p-12 gap-3">
                     <img :src="getImageUrl(slide.image)" :alt="slide.alt"
                         class="rounded-[30px] absolute inset-0 h-full w-full object-cover" />
-                    <div class="relative flex flex-col items-start justify-between gap-3">
-                        <h1 class="text-grayscale-50 text-5xl font-bold" v-text="slide.title" />
-                        <p class="text-grayscale-50 text-xl font-light" v-text="slide.description" />
+                    <div class="relative flex flex-col items-start justify-between gap-10">
+                        <h1 class="text-grayscale-50 text-display-xl" v-text="slide.title" />
+                        <p class="text-grayscale-50 text-body-light-xl" v-text="slide.description" />
                         <AppLink v-if="slide.button" :to="slide.button.url">
-                            <button class="btn-primary-lg" v-text="slide.button.title" />
+                            <button class="btn-primary-lg text-button-m" v-text="slide.button.title" />
                         </AppLink>
                     </div>
                 </div>

@@ -1,18 +1,21 @@
 import router from '@/router'
-
 const footerMenus = [
   {
-    title: 'Explore',
+    title: 'explore',
     menu: [
       {
-        title: 'Enrolled Courses',
+        title: 'enrolled courses',
         url: router.resolve({ name: 'action.modal', params: { name: 'EnrolledCoursesModal' } }),
         icon: '',
+        authRequired: false,
+        guestRequired: false,
       },
       {
-        title: 'Browse Courses',
+        title: 'browse courses',
         url: router.resolve({ name: 'courses' }),
         icon: '',
+        authRequired: false,
+        guestRequired: false,
       },
     ],
   },
@@ -20,14 +23,25 @@ const footerMenus = [
     title: 'Account',
     menu: [
       {
-        title: 'Sign Up',
-        url: router.resolve({ name: 'action.modal', params: { name: 'RegisterModal' } }),
+        title: 'my profile',
+        url: router.resolve({ name: 'action.modal', params: { name: 'ProfileModal' } }),
         icon: '',
+        authRequired: true,
+        guestRequired: false,
       },
       {
-        title: 'Log In',
+        title: 'sign up',
+        url: router.resolve({ name: 'action.modal', params: { name: 'RegisterModal' } }),
+        icon: '',
+        authRequired: false,
+        guestRequired: true,
+      },
+      {
+        title: 'log in',
         url: router.resolve({ name: 'action.modal', params: { name: 'LogInModal' } }),
         icon: '',
+        authRequired: false,
+        guestRequired: true,
       },
     ],
   },
@@ -38,16 +52,22 @@ const footerMenus = [
         title: 'contact@company.com',
         url: 'mailto:contact@companyinfo.com',
         icon: 'Envelope',
+        authRequired: false,
+        guestRequired: false,
       },
       {
         title: '(+995) 555 111 222',
         url: 'tel:+995555111222',
         icon: 'Phone',
+        authRequired: false,
+        guestRequired: false,
       },
       {
         title: 'Aghmashenebeli St.115',
         url: 'https://maps.app.goo.gl/DwQMmEwNCcDBUkiZA',
         icon: 'Point',
+        authRequired: false,
+        guestRequired: false,
       },
     ],
   },

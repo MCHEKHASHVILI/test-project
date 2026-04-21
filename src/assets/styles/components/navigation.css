@@ -1,13 +1,26 @@
-@layer components {
-  .nav-link {
-    @apply w-full flex items-center justify-between gap-2 p-3.75 rounded-lg text-xl font-medium text-grayscale-600 hover:text-purple-500 transform duration-300 transition-all;
+@utility nav-link {
+  @apply w-full flex items-center justify-between gap-2;
+  @apply p-3.75 rounded-lg;
+  @apply text-xl font-medium text-grayscale-600;
+  @apply transform duration-600 transition-all ease-out;
+  @variant hover {
+    @apply text-purple-500;
   }
 
-  .breadcrumb-item {
-    @apply text-grayscale-500 text-lg font-medium leading-none;
-    a {
-      @apply group-hover:text-purple-400;
-      @apply transform duration-300 transition-all;
+  & span:has(svg) {
+    @apply text-[24px];
+  }
+}
+
+@utility breadcrumb-item {
+  @apply text-grayscale-500 text-body-m;
+  & a {
+    @apply transform duration-300 transition-all;
+    @variant hover {
+      @apply text-purple-400;
     }
+  }
+  & span:has(svg) {
+    @apply text-[13px];
   }
 }

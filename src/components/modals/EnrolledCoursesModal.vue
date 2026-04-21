@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { watch } from 'vue'
 import SideModal from '@/layouts/modals/SideModal.vue'
 import EnrolledCourseCard from '../cards/EnrolledCourseCard.vue'
-import AppLink from '../shared/AppLink.vue'
-import BaseIcon from '../shared/BaseIcon.vue'
+import AppLink from '@/components/shared/AppLink.vue'
+import IconLoader from '@/components/shared/IconLoader.vue'
 import { useCoursesStore } from '@/stores/courses'
 import { useModalStore } from '@/stores/modals'
 import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+const { isAuthenticated } = storeToRefs(useAuthStore())
 const modalStore = useModalStore()
 
 const { activeModal } = storeToRefs(modalStore)
@@ -14,26 +16,27 @@ const { activeModal } = storeToRefs(modalStore)
 const coursesStore = useCoursesStore()
 const { fetchCoursesEnrolled } = coursesStore
 const { getCoursesEnrolled, isLoading } = storeToRefs(coursesStore)
-
-onMounted(() => {
-    fetchCoursesEnrolled()
-})
+watch(isAuthenticated, () => { if (isAuthenticated.value) fetchCoursesEnrolled() }, { immediate: true })
 </script>
 <template>
     <SideModal :isOpen="!!activeModal">
         <template #total>
             <span>{{ getCoursesEnrolled.length || 0 }}</span>
         </template>
-        <div v-if="!getCoursesEnrolled.length && !isLoading"
-            class="flex-1 h-full flex flex-col justify-center items-center">
-            <div class="w-full flex flex-col items-center gap-3 justify-center">
-                <BaseIcon name="PackageOpen" />
-                <h3 class="text-2xl font-semibold text-purple-800">No Enrolled Courses Yet</h3>
-                <article>
-                    <p class="text-sm font-medium text-purple-800">Your learning journey starts here!</p>
-                    <p class="text-sm font-medium text-purple-800">Browse courses to get started.</p>
-                </article>
-                <AppLink :to="{ name: 'courses' }" class="btn-primary">Browse Courses</AppLink>
+        <div v-if="!getCoursesEnrolled.length && !isLoading" class="flex-1 flex flex-col justify-center">
+            <div class="w-full flex flex-col items-center gap-1 justify-center">
+                <IconLoader name="PackageOpen" class="text-[132px] text-grayscale-200 m-2.5" />
+                <div class="flex flex-col items-center justify-between gap-3">
+                    <div class="flex flex-col items-center justify-between gap-2 text-purple-800">
+                        <h3 class="text-heading-3">No Enrolled Courses Yet</h3>
+                        <article class="flex flex-col items-center justify-start h-12">
+                            <p class="text-body-xs ">Your learning journey starts here!</p>
+                            <p class="text-body-xs">Browse courses to get started.</p>
+                        </article>
+                    </div>
+                    <AppLink :to="{ name: 'courses' }" class="btn-primary text-btn-s leading-6">Browse Courses
+                    </AppLink>
+                </div>
             </div>
         </div>
         <div v-else class="w-full flex flex-col gap-3 items-center justify-start">

@@ -1,0 +1,46 @@
+@utility chips-checkbox {
+  @apply flex flex-row items-center gap-2.5;
+  @apply w-fit;
+  @apply px-3 py-2;
+  @apply border border-transparent rounded-xl;
+  @apply bg-grayscale-50;
+  @apply text-grayscale-500 text-body-s text-nowrap leading-6;
+  @apply cursor-pointer;
+  @apply transition-all duration-300 transform;
+  @apply shrink-0;
+  @variant hover {
+    @apply bg-purple-100;
+    @apply text-purple-600;
+  }
+  @variant has-[:checked] {
+    @apply border border-solid border-purple-600;
+    @apply bg-purple-50;
+    @apply text-purple-600;
+  }
+  @variant has-[img] {
+    @apply gap-3;
+  }
+  & img {
+    @apply w-7.5 h-7.5;
+    @apply rounded-sm;
+    @apply object-cover;
+    @apply shrink-0;
+  }
+  & span:has(svg) {
+    @apply text-[24px];
+  }
+}
+
+@utility chips-label {
+  @apply flex flex-row items-center gap-2.5;
+  @apply w-fit;
+  @apply px-3 py-2;
+  @apply border border-transparent rounded-xl;
+  @apply bg-grayscale-100;
+  @apply text-grayscale-600 text-body-s text-nowrap leading-6;
+  @apply cursor-default;
+  @apply transition-all duration-300 transform;
+  & span:has(svg) {
+    @apply text-[18px];
+  }
+}

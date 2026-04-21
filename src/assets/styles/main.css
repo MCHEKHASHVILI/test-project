@@ -5,67 +5,30 @@
 
 @layer base {
   @import './base/reset.css';
-  @import './base/typography.css';
 }
 
 @layer components {
   @import './components/forms.css';
-  @import './components/navigation.css';
 }
+
 /* Declared Utilities */
+@import './base/typography.css';
+@import './components/chips.css';
 @import './components/buttons.css';
-
-@utility card {
-  @apply bg-grayscale-50;
-  @apply transform duration-300 transition-all ease-out;
-}
-
-@utility card-dashboard {
-  @apply border border-grayscale-100 rounded-xl;
-  @apply p-5 gap-6;
-  @variant hover {
-    @apply border-[0.5px] border-purple-200 shadow-[0_0_25px_0_#8A82D41A];
-  }
-  @variant active {
-    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
-  }
-}
-
-@utility card-listing {
-  @apply border border-grayscale-100 rounded-xl;
-  @apply p-5 gap-6;
-  @variant hover {
-    @apply border-purple-200 shadow-[0_0_15px_0_#8A82D433];
-  }
-  @variant active {
-    @apply border-purple-300 shadow-[0_0_35px_0_#8A82D440];
-  }
-}
-
-@utility card-progress {
-  @apply border-[0.5px] border-grayscale-100 rounded-xl;
-  @apply p-5 gap-2;
-  @apply shadow-[0_0_11.7px_0_#0000000A];
-  @variant hover {
-    @apply border-purple-200 shadow-[0_0_25px_0_#8A82D41A];
-  }
-  @variant active {
-    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
-  }
-}
-
-@utility card-enrolled {
-  @apply border-none rounded-xl;
-  @apply p-5 gap-4.5;
-  @variant hover {
-    @apply border-[0.5px] border-purple-200 shadow-[0_0_10px_0_#8A82D440];
-  }
-  @variant active {
-    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
-  }
-}
+@import './components/cards.css';
+@import './components/navigation.css';
+@import './utilities/custom.css';
+@import './components/inputs.css';
 
 @layer utilities {
   @import './utilities/layout.css';
-  @import './utilities/custom.css';
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }

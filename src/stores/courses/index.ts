@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { useAuthStore } from '../auth'
-import axios from 'axios'
+import { useApiStore } from '../api'
+import { storeToRefs } from 'pinia'
+// import axios from 'axios'
 import apiClient from '@/api/apiClient'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -24,11 +26,12 @@ import { sortOptions } from './sortOptions'
 import { scheduleOptions } from './scheduleOptions'
 import { timeSlotOptions } from './timeSlotOptions'
 import { sessionTypeOptions } from './sessioTypeOptions'
-
 export const useCoursesStore = defineStore('courses', () => {
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
+  const apiStore = useApiStore()
+  const { isLoading, getMessage, getErrors, getStatus } = storeToRefs(apiStore)
   // State
   const courses = ref<BrowseCoursesResponse | null>(null)
   const coursesFeatured = ref<Course[] | null>(null)
@@ -52,54 +55,44 @@ export const useCoursesStore = defineStore('courses', () => {
   const sessionTypeId = ref<number | null>(null)
   const courseRating = ref<number>(0)
   const enrollmentConflicts = ref<EnrollmentConflicts | null>(null)
-  const loading = ref<boolean>(false)
 
   // Actions
   async function fetchCategories() {
     try {
-      loading.value = true
+      // loading.value = true
       const response = await apiClient.get('/categories', { requiresAuth: false })
       if (response.ok) {
         categories.value = response.data.data
       }
     } catch (error) {
       console.error('Failed to fetch categories:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function fetchTopics() {
     try {
-      loading.value = true
       const response = await apiClient.get('/topics', { requiresAuth: false })
       if (response.ok) {
         topics.value = response.data.data
       }
     } catch (error) {
       console.error('Failed to fetch topics:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function fetchInstructors() {
     try {
-      loading.value = true
       const response = await apiClient.get('/instructors', { requiresAuth: false })
       if (response.ok) {
         instructors.value = response.data.data
       }
     } catch (error) {
       console.error('Failed to fetch instructors:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function fetchCourses(params: FetchCoursesParams = {}) {
     try {
-      loading.value = true
       const response = await apiClient.get('/courses', {
         params,
         requiresAuth: false,
@@ -110,22 +103,17 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to fetch courses:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function fetchCoursesFeatured(): Promise<void> {
     try {
-      loading.value = true
       const response = await apiClient.get('/courses/featured', { requiresAuth: false })
       if (response.ok) {
         coursesFeatured.value = response.data.data
       }
     } catch (error) {
       console.error('Failed to fetch featured courses:', error)
-    } finally {
-      loading.value = false
     }
   }
 
@@ -139,7 +127,6 @@ export const useCoursesStore = defineStore('courses', () => {
 
   async function fetchCourse(): Promise<void> {
     try {
-      loading.value = true
       const response = await apiClient.get(`/courses/${route.params.id}`)
 
       if (response.ok) {
@@ -147,8 +134,6 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to fetch course details:', error)
-    } finally {
-      loading.value = false
     }
   }
 
@@ -158,7 +143,6 @@ export const useCoursesStore = defineStore('courses', () => {
     timeSlotId.value = null
     sessionTypeId.value = null
     try {
-      loading.value = true
       const response = await apiClient.get(`/courses/${route.params.id}/weekly-schedules`, {
         requiresAuth: false,
       })
@@ -168,8 +152,6 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to fetch schedules:', error)
-    } finally {
-      loading.value = false
     }
   }
 
@@ -178,7 +160,6 @@ export const useCoursesStore = defineStore('courses', () => {
     timeSlotId.value = null
     sessionTypeId.value = null
     try {
-      loading.value = true
       const response = await apiClient.get(`/courses/${route.params.id}/time-slots`, {
         params: {
           weekly_schedule_id: scheduleId.value,
@@ -191,8 +172,6 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to fetch timeSlots:', error)
-    } finally {
-      loading.value = false
     }
   }
 
@@ -200,7 +179,6 @@ export const useCoursesStore = defineStore('courses', () => {
     // reset models
     sessionTypeId.value = null
     try {
-      loading.value = true
       const response = await apiClient.get(`/courses/${route.params.id}/session-types`, {
         params: {
           weekly_schedule_id: scheduleId.value,
@@ -213,14 +191,11 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to fetch session types:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function enrollCourse(force = false): Promise<void> {
     try {
-      loading.value = true
       const response = await apiClient.post('/enrollments', {
         courseId: route.params.id,
         courseScheduleId: courseOrder.value.session?.courseScheduleId
@@ -236,41 +211,51 @@ export const useCoursesStore = defineStore('courses', () => {
         router.push({ name: 'action.modal', params: { name: 'EnrolledSuccessModal' } })
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status
-        const message = error.response?.data?.message || error.message
-        if (status === 409) {
-          enrollmentConflicts.value = error.response?.data?.conflicts[0]
+      const apiStore = useApiStore()
+      const { getStatus, getMessage, getErrors } = storeToRefs(apiStore)
+      switch (getStatus.value) {
+        case 401:
+          console.log('Unauthorized', getStatus.value, getMessage, getErrors)
+          break
+        case 409:
           router.push({ name: 'action.modal', params: { name: 'EnrollmentConflictModal' } })
-          return Promise.reject(new Error(message))
-        }
-        console.error(`API Error (${status}): ${message}`)
-      } else {
-        console.error('An unexpected error occurred:', error)
+          break
+        case 500:
+          console.log('Error: Internal Server Error', getStatus.value, getMessage, getErrors)
+          break
+        default:
+          return Promise.reject(new Error(getMessage.value))
       }
-    } finally {
-      loading.value = false
+
+      // if (axios.isAxiosError(error)) {
+      // const status = error.response?.status
+      // const message = error.response?.data?.message || error.message
+      // if (status === 409) {
+      // enrollmentConflicts.value = error.response?.data?.conflicts[0]
+      // router.push({ name: 'action.modal', params: { name: 'EnrollmentConflictModal' } })
+      // return Promise.reject(new Error(message))
+      // }
+      // console.error(`API Error (${status}): ${message}`)
+      // } else {
+      // console.error('An unexpected error occurred:', error)
+      // }
     }
   }
 
   async function fetchCoursesEnrolled(): Promise<void> {
     try {
-      loading.value = true
       const response = await apiClient.get('/enrollments')
       if (response.ok) {
         coursesEnrolled.value = response.data.data
       }
     } catch (error) {
       console.error('Failed to fetch enrolled courses:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function rateCourse(): Promise<void> {
     if (!courseDetailed.value) return new Promise(() => {})
     try {
-      loading.value = true
       const response = await apiClient.post(`/courses/${courseDetailed.value.id}/reviews`, {
         rating: courseRating.value,
       })
@@ -279,15 +264,12 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to rate a course:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function completeCourse(): Promise<void> {
     if (!courseDetailed.value) return new Promise(() => {})
     try {
-      loading.value = true
       const response = await apiClient.patch(
         `/enrollments/${courseDetailed.value.enrollment.id}/complete`,
         {
@@ -302,15 +284,12 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to complete a course:', error)
-    } finally {
-      loading.value = false
     }
   }
 
   async function retakeCourse(): Promise<void> {
     if (!courseDetailed.value) return new Promise(() => {})
     try {
-      loading.value = true
       const response = await apiClient.delete(`/enrollments/${courseDetailed.value.enrollment.id}`)
       if (response.ok) {
         await fetchCourse()
@@ -318,8 +297,6 @@ export const useCoursesStore = defineStore('courses', () => {
       }
     } catch (error) {
       console.error('Failed to retake a course:', error)
-    } finally {
-      loading.value = false
     }
   }
 
@@ -434,8 +411,6 @@ export const useCoursesStore = defineStore('courses', () => {
       : 0
   })
 
-  const isLoading = computed(() => loading.value)
-
   const courseOrder = computed(() => {
     const course = courseDetailed.value
     const schedule = updatedSessionOptions.value.find((option) => option.id === scheduleId.value)
@@ -527,5 +502,8 @@ export const useCoursesStore = defineStore('courses', () => {
     getCoursesFeatured,
     getAvgRating,
     isLoading,
+    getMessage,
+    getErrors,
+    getStatus,
   }
 })

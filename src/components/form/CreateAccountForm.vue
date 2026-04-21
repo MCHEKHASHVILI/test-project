@@ -26,9 +26,9 @@ const { currentStep, totalSteps, email, password, passwordConfirmation, userName
 
             <!-- Step 2 -->
             <div v-else-if="currentStep === 2" class="flex flex-col gap-6">
-                <TextInput type="text" label="Password*" autocomplete="off" icon="eye" v-model="password"
+                <TextInput type="password" label="Password*" autocomplete="off" icon="eye" v-model="password"
                     :errors="validationErrors?.password" />
-                <TextInput type="password" label="Confirm Password*" autocomplete="off" icon="eye-off"
+                <TextInput type="password" label="Confirm Password*" autocomplete="off" icon="eye-closed"
                     v-model="passwordConfirmation" :errors="validationErrors?.password" />
             </div>
 
@@ -52,10 +52,10 @@ const { currentStep, totalSteps, email, password, passwordConfirmation, userName
             <div class="grow border-t border-grayscale-200"></div>
         </div>
         <div class="flex items-center space-x-2 justify-center">
-            <span class="text-[12px] text-grayscale-500 lowercase first-letter:uppercase">Already have an
+            <span class="text-helper-regular-s text-grayscale-500 lowercase first-letter:uppercase">Already have an
                 account?</span>
             <AppLink :to="{ name: 'action.modal', params: { name: 'LogInModal' } }"
-                class="text-[14px] text-grayscale-900 font-medium text-center underline decoration-solid underline-offset-[25%] decoration-[0%] cursor-pointer">
+                class="text-body-xs text-grayscale-900 font-medium text-center underline decoration-solid underline-offset-[25%] decoration-[0%] cursor-pointer">
                 Log in
             </AppLink>
         </div>

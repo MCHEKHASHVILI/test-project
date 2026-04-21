@@ -3,14 +3,16 @@ import BaseModal from '@/layouts/modals/BaseModal.vue'
 import BaseIcon from '@/components/shared/BaseIcon.vue'
 import { useCoursesStore } from '@/stores/courses'
 import { useModalStore } from '@/stores/modals'
+import { useApiStore } from '@/stores/api'
 import { storeToRefs } from 'pinia'
 const modalStore = useModalStore()
 
 const { activeModal } = storeToRefs(modalStore)
 const coursesStore = useCoursesStore()
 const { enrollCourse } = coursesStore
-const { enrollmentConflicts } = storeToRefs(coursesStore)
-
+// const { enrollmentConflicts } = storeToRefs(coursesStore)
+const { getErrors } = storeToRefs(useApiStore())
+const { conflicts } = getErrors.value
 </script>
 <template>
     <BaseModal :isOpen="!!activeModal" :title="'Enrollment Conflict'" class="w-119" @close="$emit('close')">
@@ -23,9 +25,9 @@ const { enrollmentConflicts } = storeToRefs(coursesStore)
         <div class="flex flex-col space-y-6 text-center">
             <p class="text-xl font-medium text-grayscale-700 leading-[100%]">
                 You are already enrolled in <span class="font-semibold leading-6">“{{
-                    enrollmentConflicts?.conflictingCourseName
+                    conflicts.conflictingCourseName
                     }}”</span> with the same schedule: <span class="font-semibold leading-6">{{
-                        enrollmentConflicts?.schedule
+                        conflicts.schedule
                     }}</span>
             </p>
             <div class="w-full flex flex-row items-center justify-between gap-2">

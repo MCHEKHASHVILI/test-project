@@ -41,7 +41,7 @@ const isActive = computed(() => {
         <transition name="fade">
             <ul v-if="isOpen"
                 class="absolute z-50 top-full mt-1 w-full rounded-[10px] border border-grayscale-100 bg-grayscale-50 overflow-y-auto shadow-sm">
-                <li v-for="option in options" :key="option.value" @mousedown="selectOption(option)"
+                <li v-for="option in options" :key="option.value as PropertyKey" @mousedown="selectOption(option)"
                     class="px-5 py-2.5 hover:bg-grayscale-100 cursor-pointer "
                     :class="[isActive(option) ? 'bg-purple-100 text-purple-500' : 'bg-grayscale-50 text-grayscale-500']">
                     {{ option.label }}

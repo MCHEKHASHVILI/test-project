@@ -1,0 +1,62 @@
+@utility card {
+  @apply bg-grayscale-50;
+  @apply transform duration-300 transition-all ease-out;
+}
+
+@utility card-dashboard {
+  @apply border border-grayscale-100 rounded-xl;
+  @apply p-5 gap-6;
+  @variant hover {
+    @apply border-[0.5px] border-purple-200 shadow-[0_0_25px_0_#8A82D41A];
+  }
+  @variant active {
+    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
+  }
+  & img {
+    @apply h-[262px] aspect-466/262 object-cover rounded-[10px];
+  }
+}
+
+@utility card-listing {
+  @apply border border-grayscale-100 rounded-xl;
+  @apply p-5 gap-6;
+  @variant hover {
+    @apply border-purple-200 shadow-[0_0_15px_0_#8A82D433];
+  }
+  @variant active {
+    @apply border-purple-300 shadow-[0_0_35px_0_#8A82D440];
+  }
+  & img {
+    @apply h-[181px] aspect-333/181 object-cover rounded-[10px];
+  }
+}
+
+@utility card-progress {
+  @apply border-[0.5px] border-grayscale-100 rounded-xl;
+  @apply p-5 gap-2;
+  @apply shadow-[0_0_11.7px_0_#0000000A];
+  @variant hover {
+    @apply border-purple-200 shadow-[0_0_25px_0_#8A82D41A];
+  }
+  @variant active {
+    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
+  }
+
+  & img {
+    @apply h-[123px] aspect-140/123 object-cover rounded-[10px];
+  }
+}
+
+@utility card-enrolled {
+  @apply border-none rounded-xl;
+  @apply p-5 gap-4.5;
+  @variant hover {
+    @apply border-[0.5px] border-purple-200 shadow-[0_0_10px_0_#8A82D440];
+  }
+  @variant active {
+    @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
+  }
+  & img {
+    @apply h-[191px] aspect-269/191 object-cover rounded-[10px];
+  }
+}
