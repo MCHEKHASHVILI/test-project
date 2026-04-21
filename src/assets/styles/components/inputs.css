@@ -27,7 +27,7 @@
       @apply text-grayscale-400;
     }
 
-    @variant filled (&:not(:placeholder-shown)) {\
+    @variant filled (&:not(:placeholder-shown)) {
       @apply text-grayscale-700;
     }
     & :has(span.prefix) {
