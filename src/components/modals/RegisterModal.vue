@@ -13,16 +13,19 @@ const { activeModal } = storeToRefs(modalStore)
 const registrationStore = useRegistrationStore()
 const { register } = registrationStore
 const { currentStep } = storeToRefs(registrationStore)
-
 </script>
 <template>
-    <BaseModal :isOpen="!!activeModal" :title="'Create Account'" :subtitle="'Join and start learning today'"
-        @close="$emit('close')">
-        <template #back>
-            <button v-if="currentStep > 1" class="cursor-pointer" @click="registrationStore.prevStep">
-                <BaseIcon name="BackIcon" class="rotate-180" />
-            </button>
-        </template>
-        <CreateAccountForm @submit="register" />
-    </BaseModal>
+  <BaseModal
+    :isOpen="!!activeModal"
+    :title="'Create Account'"
+    :subtitle="'Join and start learning today'"
+    @close="$emit('close')"
+  >
+    <template #back>
+      <button v-if="currentStep > 1" class="cursor-pointer" @click="registrationStore.prevStep">
+        <BaseIcon name="BackIcon" class="rotate-180" />
+      </button>
+    </template>
+    <CreateAccountForm @submit="register" />
+  </BaseModal>
 </template>

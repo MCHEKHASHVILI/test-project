@@ -1,18 +1,16 @@
 @utility input-group {
   @apply flex flex-col gap-2 w-full;
-  & .text-input {
-    @apply;
-  }
+
   & label {
-    @apply text-sm font-medium text-grayscale-700 capitalize;
+    @apply text-body-xs text-grayscale-700 capitalize;
   }
   & input {
-    @apply py-3 pl-3.25 pr-3.75;
+    @apply py-3 pl-[13px] pr-[15px];
   }
   & input,
   .text-input {
     @apply w-full;
-    @apply border-[1.5px] border-solid border-grayscale-200 rounded-lg
+    @apply border-[1.5px] border-solid border-grayscale-200 rounded-lg;
     @apply text-body-xs text-grayscale-400;
     @apply bg-transparent;
     @apply transform duration-300 transition-all ease-out;
@@ -20,18 +18,6 @@
     @variant hover {
       @apply border-grayscale-300;
       @apply text-grayscale-200;
-    }
-
-    @variant active {
-      @apply border-grayscale-400;
-      @apply text-grayscale-400;
-    }
-
-    @variant filled (&:not(:placeholder-shown)) {
-      @apply text-grayscale-700;
-    }
-    & :has(span.prefix) {
-      @apply text-grayscale-500 text-sm;
     }
   }
 }

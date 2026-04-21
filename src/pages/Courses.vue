@@ -6,7 +6,7 @@ import BrowseCourseCard from '@/components/cards/BrowseCourseCard.vue'
 import FilterCheckBox from '@/components/form/FilterCheckBox.vue'
 import SelectSort from '@/components/form/SelectSort.vue'
 import Pagination from '@/components/shared/Pagination.vue'
-import { onMounted, watch } from "vue"
+import { onMounted, watch } from 'vue'
 import { useCoursesStore } from '@/stores/courses'
 import { storeToRefs } from 'pinia'
 
@@ -21,29 +21,27 @@ const {
   page,
   queryParams,
   totalFiltersCount,
-  sortOptions
+  sortOptions,
 } = storeToRefs(coursesStore)
 
-const {
-  fetchCategories,
-  fetchInstructors,
-  fetchTopics,
-  fetchCourses,
-  clearFilters
-} = coursesStore
+const { fetchCategories, fetchInstructors, fetchTopics, fetchCourses, clearFilters } = coursesStore
 
-watch(filters, () => page.value = 1, { deep: true })
+watch(filters, () => (page.value = 1), { deep: true })
 
-watch(queryParams, async (newValue, oldValue) => {
-  await fetchCourses(queryParams.value)
-}, { deep: true })
+watch(
+  queryParams,
+  async (newValue, oldValue) => {
+    await fetchCourses(queryParams.value)
+  },
+  { deep: true },
+)
 
 onMounted(() => {
   fetchCategories()
   fetchInstructors()
   fetchTopics()
   fetchCourses()
-});
+})
 </script>
 
 <template>
@@ -54,14 +52,16 @@ onMounted(() => {
         <h1 class="text-heading-1 text-grayscale-950">Filters</h1>
         <button
           class="w-full flex flex-row items-center justify-end gap-1.5 cursor-pointer text-grayscale-400 hover:text-purple-400 text-body-s"
-          @click="clearFilters">
+          @click="clearFilters"
+        >
           <span>Clear All Filters</span>
           <IconLoader name="XIcon" />
         </button>
       </div>
       <div v-if="courses" class="w-291.75 flex flex-row items-center justify-between">
-        <span class="text-grayscale-500 font-medium">Showing {{ courses.data.length }} out of {{ courses.meta.total
-          }}</span>
+        <span class="text-grayscale-500 font-medium"
+          >Showing {{ courses.data.length }} out of {{ courses.meta.total }}</span
+        >
         <SelectSort v-model="sort" :options="sortOptions" />
       </div>
     </div>
@@ -71,27 +71,47 @@ onMounted(() => {
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">Categories</h4>
             <div class="flex flex-wrap gap-2">
-              <FilterCheckBox v-for="item in categories" :data="item" v-model="filters.categories" :key="item.id"
-                :value="item.id" class="chips-checkbox" />
+              <FilterCheckBox
+                v-for="item in categories"
+                :data="item"
+                v-model="filters.categories"
+                :key="item.id"
+                :value="item.id"
+                class="chips-checkbox"
+              />
             </div>
           </section>
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">Topics</h4>
             <div class="flex flex-wrap gap-2">
-              <FilterCheckBox v-for="item in filteredTopics" :data="item" v-model="filters.topics" :key="item.id"
-                :value="item.id" class="chips-checkbox" />
+              <FilterCheckBox
+                v-for="item in filteredTopics"
+                :data="item"
+                v-model="filters.topics"
+                :key="item.id"
+                :value="item.id"
+                class="chips-checkbox"
+              />
             </div>
           </section>
           <section class="flex flex-col gap-6">
             <h4 class="text-lg text-grayscale-500 font-medium">instructor</h4>
             <div class="flex flex-col gap-2">
-              <FilterCheckBox v-for="item in instructors" :data="item" v-model="filters.instructors" :key="item.id"
-                :value="item.id" class="chips-checkbox" />
+              <FilterCheckBox
+                v-for="item in instructors"
+                :data="item"
+                v-model="filters.instructors"
+                :key="item.id"
+                :value="item.id"
+                class="chips-checkbox"
+              />
             </div>
           </section>
         </div>
         <div class="border-t pt-4 border-grayscale-300">
-          <span class="text-sm font-medium text-grayscale-400">{{ totalFiltersCount }} Filters active</span>
+          <span class="text-sm font-medium text-grayscale-400"
+            >{{ totalFiltersCount }} Filters active</span
+          >
         </div>
       </aside>
       <section class="w-291.75 flex flex-col gap-8">
@@ -99,8 +119,13 @@ onMounted(() => {
           <BrowseCourseCard v-for="item in courses.data" :course="item" />
         </div>
         <div class="flex mx-auto">
-          <Pagination v-if="courses?.data" v-model="page" :last-page="courses.meta.lastPage"
-            :per-page="courses.meta.perPage" :total="courses.meta.total" />
+          <Pagination
+            v-if="courses?.data"
+            v-model="page"
+            :last-page="courses.meta.lastPage"
+            :per-page="courses.meta.perPage"
+            :total="courses.meta.total"
+          />
         </div>
       </section>
     </div>
