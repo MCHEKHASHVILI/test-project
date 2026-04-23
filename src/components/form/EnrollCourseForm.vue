@@ -5,6 +5,7 @@ import TimeBox from './TimeBox.vue'
 import SessionBox from './SessionBox.vue'
 import IconLoader from '@/components/shared/IconLoader.vue'
 import AppLink from '@/components/shared/AppLink.vue'
+import Warning from '@/components/shared/Warning.vue'
 import { useCoursesStore } from '@/stores/courses'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
@@ -139,44 +140,30 @@ watch(sessionTypeIds, (ids) => {
       enter-active-class="duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
       leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
       <section>
-        <div v-if="!isAuthenticated"
-          class="w-full flex flex-row justify-between p-5 border border-[#E5E7EB] rounded-xl bg-[#F8FAFC]">
-          <div div class="flex flex-col gap-2.25">
-            <div class="flex flex-row gap-1.5">
-              <IconLoader name="warning" class="text-helper-warning" />
-              <span class="capitalize text-md text-grayscale-800 font-medium leading-6"
-                v-text="'authentication required'" />
-            </div>
-            <span class="lowercase first-letter:capitalize text-grayscale-400 text-xs"
-              v-text="'You need sign in to your profile before enrolling in this course.'" />
-          </div>
-          <AppLink :to="{ name: 'action.modal', params: { name: 'LogInModal' } }">
-            <button
-              class="btn-outline-sm border-purple-200 bg-purple-50 flex flex-row items-center gap-1.5 justify-between">
-              <span class="capitalize" v-text="'sign in'" />
-              <IconLoader name="arrow-right" />
-            </button>
-          </AppLink>
-        </div>
-        <div v-if="isAuthenticated && !isAuthorized"
-          class="w-full flex flex-row justify-between p-5 border border-[#E5E7EB] rounded-xl bg-[#F8FAFC]">
-          <div div class="flex flex-col gap-2.25">
-            <div class="flex flex-row gap-1.5">
-              <IconLoader name="warning" class="text-helper-warning" />
-              <span class="capitalize text-md text-grayscale-800 font-medium leading-6"
-                v-text="'complete your profile'" />
-            </div>
-            <span class="lowercase first-letter:capitalize text-grayscale-400 text-xs"
-              v-text="'You need to fill in your profile details before enrolling in this course.'" />
-          </div>
-          <AppLink :to="{ name: 'action.modal', params: { name: 'ProfileModal' } }">
-            <button
-              class="btn-outline-sm border-purple-200 bg-purple-50 flex flex-row items-center gap-1.5 justify-between">
-              <span class="capitalize" v-text="'complete'" />
-              <IconLoader name="arrow-right" />
-            </button>
-          </AppLink>
-        </div>
+        <Warning v-if="!isAuthenticated" title="authentication required"
+          description="You need sign in to your profile before enrolling in this course.">
+          <template #action>
+            <AppLink :to="{ name: 'action.modal', params: { name: 'LogInModal' } }">
+              <button
+                class="btn-outline-sm text-helper-regular-m border-purple-200 bg-purple-50 flex flex-row items-center gap-1.5 justify-between">
+                <span class="capitalize" v-text="'sign in'" />
+                <IconLoader name="arrow_right" />
+              </button>
+            </AppLink>
+          </template>
+        </Warning>
+        <Warning v-if="isAuthenticated && !isAuthorized" title="complete your profile"
+          description="You need to fill in your profile details before enrolling in this course.">
+          <template #action>
+            <AppLink :to="{ name: 'action.modal', params: { name: 'ProfileModal' } }">
+              <button
+                class="btn-outline-sm text-helper-regular-m border-purple-200 bg-purple-50 flex flex-row items-center gap-1.5 justify-between">
+                <span class="capitalize" v-text="'complete'" />
+                <IconLoader name="arrow_right" />
+              </button>
+            </AppLink>
+          </template>
+        </Warning>
       </section>
     </Transition>
   </div>

@@ -13,7 +13,7 @@
     @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
   }
   & img {
-    @apply h-[262px] aspect-466/262 object-cover rounded-[10px];
+    @apply h-65.5 aspect-466/262 object-cover rounded-[10px];
   }
 }
 
@@ -27,7 +27,7 @@
     @apply border-purple-300 shadow-[0_0_35px_0_#8A82D440];
   }
   & img {
-    @apply h-[181px] aspect-333/181 object-cover rounded-[10px];
+    @apply h-45.25 aspect-333/181 object-cover rounded-[10px];
   }
 }
 
@@ -43,7 +43,7 @@
   }
 
   & img {
-    @apply h-[123px] aspect-140/123 object-cover rounded-[10px];
+    @apply h-30.75 aspect-140/123 object-cover rounded-[10px];
   }
 }
 
@@ -57,6 +57,6 @@
     @apply border border-purple-300 shadow-[0_0_35px_0_#8A82D440];
   }
   & img {
-    @apply h-[191px] aspect-269/191 object-cover rounded-[10px];
+    @apply h-47.75 aspect-269/191 object-cover rounded-[10px];
   }
 }

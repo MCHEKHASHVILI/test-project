@@ -223,6 +223,9 @@ export const useCoursesStore = defineStore('courses', () => {
         case 409:
           router.push({ name: 'action.modal', params: { name: 'EnrollmentConflictModal' } })
           break
+        case 422:
+          router.push({ name: 'action.modal', params: { name: 'ProfileAlertModal' } })
+          break
         case 500:
           console.log('Error: Internal Server Error', getStatus.value, getMessage, getErrors)
           break
