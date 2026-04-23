@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseModal from '@/layouts/modals/BaseModal.vue'
-import BaseIcon from '@/components/shared/BaseIcon.vue'
+import IconLoader from '@/components/shared/IconLoader.vue'
 import { useCoursesStore } from '@/stores/courses'
 import { useModalStore } from '@/stores/modals'
 import { storeToRefs } from 'pinia'
@@ -16,7 +16,7 @@ const { getCourseDetailed } = storeToRefs(coursesStore)
     <template #exit><span /></template>
     <template #icon>
       <div class="w-full flex flex-row items-center justify-center py-6">
-        <BaseIcon name="ModalComplete" width="94" height="94" class="text-purple-500" />
+        <IconLoader name="ModalComplete" class="text-[94px] text-purple-500" />
       </div>
     </template>
     <div class="flex flex-col space-y-6 text-center">

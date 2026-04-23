@@ -30,6 +30,12 @@
   @apply leading-none;
   @apply tracking-normal;
 }
+@utility text-heading-5 {
+  @apply text-[16px];
+  @apply font-semibold;
+  @apply leading-none;
+  @apply tracking-normal;
+}
 /** Body */
 @utility text-body-light-xl {
   @apply text-[24px];

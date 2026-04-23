@@ -58,3 +58,24 @@
 @utility btn-outline-lg {
   @apply btn-outline py-4.25 px-6.25;
 }
+
+/** Register Enroll Buttons */
+@utility btn-enroll {
+  @apply h-15.75;
+  @apply py-2.5;
+  @apply border-none rounded-xl;
+  @apply bg-purple-500;
+  @apply text-heading-4 text-grayscale-50;
+  @apply cursor-pointer;
+  @apply transform duration-300 transition-opacity ease-out;
+
+  @variant hover {
+    @apply bg-purple-600;
+  }
+  @variant active {
+    @apply bg-purple-700;
+  }
+  @variant disabled {
+    @apply bg-purple-50 text-purple-200 cursor-not-allowed;
+  }
+}

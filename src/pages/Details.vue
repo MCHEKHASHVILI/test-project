@@ -2,9 +2,10 @@
 import { useRoute } from 'vue-router'
 import { onMounted, watch } from 'vue'
 import RouterBreadCrumbs from '@/components/shared/RouterBreadCrumbs.vue'
-import BaseIcon from '@/components/shared/BaseIcon.vue'
+import IconLoader from '@/components/shared/IconLoader.vue'
 import EnrollCourseForm from '@/components/form/EnrollCourseForm.vue'
 import CompleteCourseForm from '@/components/form/CompleteCourseForm.vue'
+import AvgRating from '@/components/shared/AvgRating.vue'
 import { useCoursesStore } from '@/stores/courses'
 import { storeToRefs } from 'pinia'
 const coursesStore = useCoursesStore()
@@ -23,76 +24,49 @@ watch(route, () => {
 <template>
   <div v-if="getCourseDetailed" class="flex flex-col gap-6">
     <RouterBreadCrumbs />
-    <h1 class="text-[40px] font-semibold text-grayscale-900" v-text="getCourseDetailed.title" />
+    <h1 class="text-heading-1 text-grayscale-900" v-text="getCourseDetailed.title" />
     <div class="flex flex-row items-start justify-between">
       <article class="w-225 flex flex-col gap-4.5">
-        <div class="w-full h-120 rounded-[10px]">
-          <img
-            :src="getCourseDetailed.image"
-            alt="Course Image"
-            class="w-full h-full object-cover rounded-[10px]"
-          />
-        </div>
+        <img :src="getCourseDetailed.image" class="h-[474.15px] w- object-cover rounded-[10px]" />
         <div class="w-full flex flex-row items-center justify-start">
-          <div class="w-full flex flex-row items-center justify-start space-x-4">
-            <div class="flex flex-row items-center text-grayscale-600 justify-start gap-1">
-              <BaseIcon name="calendar" />
-              <span class="text-sm font-medium">{{ getCourseDetailed.durationWeeks }} Weeks</span>
+          <div class="w-full flex flex-row items-center justify-start space-x-4 text-grayscale-600">
+            <div class="flex flex-row items-center  justify-start gap-1">
+              <IconLoader name="calendar" class="text-[20px]" />
+              <span class="text-body-xs">{{ getCourseDetailed.durationWeeks }} Weeks</span>
             </div>
-            <div class="flex flex-row items-center justify-start text-grayscale-600 gap-1">
-              <BaseIcon name="clock" />
-              <span class="text-sm font-medium">{{ getCourseDetailed.hours }} Hours</span>
+            <div class="flex flex-row items-center justify-start gap-1">
+              <IconLoader name="clock" class="text-[20px]" />
+              <span class="text-body-xs">{{ getCourseDetailed.hours }} Hours</span>
             </div>
           </div>
           <div class="w-full flex flex-row items-center justify-end space-x-4">
-            <div class="flex flex-row items-center justify-start gap-1">
-              <BaseIcon name="star" class="text-star-dark [&_path]:stroke-0.125" />
-              <span class="text-sm font-medium text-grayscale-600" v-text="getAvgRating" />
-            </div>
+            <AvgRating :value="getAvgRating" iconClass="text-helper-warning text-[26px]"
+              labelclass="text-[14px] font-medium leading-[1.5]!" />
             <div class="text-md font-medium text-grayscale-500">
-              <div
-                class="items-center w-fit flex flex-row justify-start gap-2.5 bg-grayscale-50 text-grayscale-600 rounded-xl py-2 px-3"
-              >
-                <BaseIcon :name="getCourseDetailed?.category.icon" />
-                <span>{{ getCourseDetailed?.category.name }}</span>
+              <div class="chips-label bg-grayscale-50">
+                <IconLoader :name="getCourseDetailed?.category.icon" class="text-[24px]! text-grayscale-600" />
+                <span class="text-body-s leading-6! text-grayscale-500" v-text="getCourseDetailed?.category.name" />
               </div>
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-2">
           <label class="box-border inline-flex items-center">
-            <div
-              class="w-fit flex flex-row space-x-2.5 items-center bg-grayscale-50 rounded-xl py-2 px-3"
-            >
-              <div class="w-7.5 h-7.5 rounded-sm overflow-hidden">
-                <img
-                  :src="getCourseDetailed.instructor.avatar"
-                  class="w-full h-full rounded-sm object-cover"
-                />
-              </div>
-              <span>{{ getCourseDetailed.instructor.name }}</span>
+            <div class="chips-label bg-grayscale-50">
+              <img :src="getCourseDetailed.instructor.avatar" class="w-7.5 h-7.5 rounded-sm object-cover" />
+              <span v-text="getCourseDetailed.instructor.name" />
             </div>
           </label>
         </div>
         <article class="flex flex-col gap-4">
-          <h4 class="text-xl font-semibold text-grayscale-400 leading-6">Course Description</h4>
-          <p
-            class="text-md font-medium text-grayscale-600"
-            v-text="getCourseDetailed.description"
-          />
+          <h4 class="text-heading-4 text-grayscale-400 leading-6!">Course Description</h4>
+          <p class="text-body-s text-grayscale-600 leading-6!" v-text="getCourseDetailed.description" />
         </article>
       </article>
-      <section class="w-140">
-        <Transition
-          name="fade"
-          mode="out-in"
-          enter-active-class="duration-300 ease-out"
-          enter-from-class="opacity-0"
-          enter-to-class="opacity-100"
-          leave-active-class="duration-200 ease-in"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
-        >
+      <section class="w-132.5">
+        <Transition name="fade" mode="out-in" enter-active-class="duration-300 ease-out" enter-from-class="opacity-0"
+          enter-to-class="opacity-100" leave-active-class="duration-200 ease-in" leave-from-class="opacity-100"
+          leave-to-class="opacity-0">
           <EnrollCourseForm v-if="!getCourseDetailed.enrollment" />
           <CompleteCourseForm v-else />
         </Transition>

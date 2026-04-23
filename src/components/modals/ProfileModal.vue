@@ -9,15 +9,16 @@ import FileUploadIdle from '../shared/FileUploadIdle.vue'
 import { useProfileStore } from '@/stores/profile'
 import { useModalStore } from '@/stores/modals'
 import { storeToRefs } from 'pinia'
-
+import { useApiStore } from '@/stores/api'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const modalStore = useModalStore()
-// const { isOpen } = storeToRefs(modalStore)
-
 const { activeModal } = storeToRefs(modalStore)
-
-const isOpen = true
+const apiStore = useApiStore()
+const { getErrors } = storeToRefs(apiStore)
 
 const profileStore = useProfileStore()
+
 const {
   email,
   avatar,
@@ -28,14 +29,12 @@ const {
   avatarUrl,
   ifProfileComplete,
   ageOptions,
-  validationErrors,
 } = storeToRefs(profileStore)
+const { updateProfile } = profileStore
 
-async function updateProfile(): Promise<void> {
-  const success = await profileStore.updateProfile()
-  if (success) {
-    close()
-  }
+function onClose() {
+  if (ifProfileComplete.value) return modalStore.closeModal()
+  router.push({ name: 'action.modal', params: { name: "ProfileAlertModal" } })
 }
 
 onMounted(() => {
@@ -43,56 +42,28 @@ onMounted(() => {
 })
 </script>
 <template>
-  <BaseModal :isOpen="!!activeModal" :title="'Profile'" @close="$emit('close')">
-    <div class="flex flex-row space-x-2.5 items-center justify-start mb-6">
+  <BaseModal :isOpen="!!activeModal" :title="'Profile'" @close="onClose">
+    <div class="flex flex-row gap-3 items-center justify-start mb-6">
       <BaseAvatar :status="ifProfileComplete ? 'active' : 'away'" :avatar="avatarUrl" />
-      <div class="flex flex-col">
-        <h4 v-text="userName" />
-        <small v-text="'Profile is Complete'" />
+      <div class="flex flex-col gap-1 justify-between text-grayscale-950">
+        <h4 class="text-heading-4 leading-6" v-text="userName" />
+        <span
+          :class="['text-helper-regular-xs capitalize', ifProfileComplete ? 'text-helper-success' : 'text-helper-warning']"
+          v-text="ifProfileComplete ? 'profile Complete ✓' : 'profile incomplete'" />
       </div>
     </div>
     <form class="modal" @submit.prevent="updateProfile" enctype="multipart/form-data">
-      <TextInput
-        type="text"
-        label="Full Name"
-        icon="edit"
-        v-model="fullName"
-        :errors="validationErrors?.full_name"
-      />
-      <TextInput
-        type="email"
-        label="Email"
-        icon="eye"
-        :placeholder="email?.toString() || ''"
-        disabled
-      />
+      <TextInput type="text" label="Full Name" icon="pencil_simple" v-model="fullName" :errors="getErrors?.full_name"
+        placeholder="Full name" />
+      <TextInput type="email" label="Email" icon="check" :placeholder="email?.toString() || ''" disabled />
       <div class="flex flex-row gap-2">
-        <TextInput
-          type="text"
-          label="Mobile Number"
-          icon="check-sm"
-          prefix="+995"
-          v-model="mobileNumber"
-          class="w-full"
-          :errors="validationErrors?.mobile_number"
-        />
-        <SelectInput
-          :options="ageOptions"
-          label="Age"
-          icon="eye"
-          v-model="age"
-          class="shrink-2"
-          :errors="validationErrors?.age"
-        />
+        <TextInput type="text" label="Mobile Number" icon="check" prefix="+995" v-model="mobileNumber" class="grow"
+          :errors="getErrors?.mobile_number" />
+        <SelectInput :options="ageOptions" label="Age" icon="arrow" v-model="age" :errors="getErrors?.age" />
       </div>
-      <FileInput
-        label="Upload Avatar"
-        v-model="avatar"
-        :idle_component="FileUploadIdle"
-        accepted-file-types="image/jpeg, image/png, image/webp"
-        :allow-multiple="false"
-      />
-      <button class="btn-primary" type="submit" v-text="'Update Profile'" />
+      <FileInput label="Upload Avatar" v-model="avatar" :idle_component="FileUploadIdle"
+        accepted-file-types="image/jpeg, image/png, image/webp" :allow-multiple="false" />
+      <button class="btn-primary text-button-s" type="submit" v-text="'Update Profile'" />
     </form>
   </BaseModal>
 </template>

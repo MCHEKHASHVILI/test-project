@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import BaseIcon from '../shared/BaseIcon.vue'
 import IconLoader from '../shared/IconLoader.vue'
 
 import { Category, Topic, Instructor } from '@types'
@@ -27,13 +26,7 @@ const toggleCheckbox = (event: any) => {
 </script>
 <template>
   <label>
-    <input
-      type="checkbox"
-      class="sr-only"
-      :value="value"
-      :checked="isChecked"
-      @change="toggleCheckbox"
-    />
+    <input type="checkbox" class="sr-only" :value="value" :checked="isChecked" @change="toggleCheckbox" />
     <!-- <BaseIcon v-if="'icon' in data" :name="data.icon" /> -->
     <IconLoader v-if="'icon' in data" :name="data.icon" />
     <img v-if="'avatar' in data" :src="data.avatar" />

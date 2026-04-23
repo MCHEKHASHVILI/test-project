@@ -4,16 +4,20 @@ withDefaults(
   defineProps<{
     value?: number
     iconName?: string
+    iconClass?: string,
+    labelClass?: string
   }>(),
   {
     value: 0,
-    iconName: 'Star',
+    iconName: 'rating',
+    iconClass: 'text-helper-warning text-[18px]',
+    labelClass: 'text-body-xs leading-0 text-grayscale-600'
   },
 )
 </script>
 <template>
   <div class="flex flex-row items-center justify-between gap-1">
-    <IconLoader :name="iconName" class="text-helper-warning text-[18px]" />
-    <span v-text="value.toFixed(1)" class="text-body-xs leading-0 text-grayscale-600" />
+    <IconLoader :name="iconName" :class="iconClass" />
+    <span v-text="value.toFixed(1)" :class="labelClass" />
   </div>
 </template>

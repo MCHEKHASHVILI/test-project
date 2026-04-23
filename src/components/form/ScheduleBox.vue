@@ -16,19 +16,10 @@ function parseScheduleLable(label: string): string {
 <template>
   <div class="flex-1 flex flex-row justify-between gap-1.5">
     <label v-for="option in options" :key="option.id" class="flex-1 cursor-pointer">
-      <input
-        type="radio"
-        :value="option.id"
-        v-model="model"
-        class="peer hidden"
-        :disabled="!available(option.id)"
-      />
+      <input type="radio" :value="option.id" v-model="model" class="peer hidden" :disabled="!available(option.id)" />
       <div
-        class="p-2.5 w-full aspect-square flex items-center justify-center border border-grayscale-200 bg-grayscale-50 rounded-xl text-grayscale-800 peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500 peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500 peer-disabled:border-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:cursor-not-allowed transform duration-500 transition-all ease-in-out"
-      >
-        <h5 class="block font-semibold">
-          {{ parseScheduleLable(option.label) }}
-        </h5>
+        class="p-2.5 w-full aspect-square flex items-center justify-center border border-grayscale-200 bg-grayscale-50 rounded-xl text-grayscale-800 peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500 peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500 peer-disabled:text-grayscale-200 peer-disabled:border-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:cursor-not-allowed transform duration-500 transition-all ease-out">
+        <span class="text-heading-5 text-center" v-text="parseScheduleLable(option.label)" />
       </div>
     </label>
   </div>

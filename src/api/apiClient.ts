@@ -4,8 +4,16 @@ import { useApiStore } from '@/stores/api'
 import { storeToRefs } from 'pinia'
 import { type AxiosResponse } from 'axios'
 export interface ErrorResponse extends AxiosResponse {
-  response: { status: number; message?: string; conflicts?: []; errors?: []; ok: boolean }
+  response: {
+    status: number
+    message?: string
+    conflicts?: []
+    errors?: []
+    data?: { errors: []; conflicts?: [] }
+    ok: boolean
+  }
   message?: string
+  errors?: []
 }
 declare module 'axios' {
   export interface AxiosResponse<T = any, D = any> {
@@ -37,23 +45,16 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => {
-    const apiStore = useApiStore()
-    const { loading } = storeToRefs(apiStore)
-    // Add custom 'ok' property to successful responses
+    const { reset } = useApiStore()
     response.ok = response.status >= 200 && response.status < 300
-    if (response.ok) loading.value = false
+    if (response.ok) reset(response.status)
     return response
   },
   (error) => {
-    // Ensure 'ok' is false even on caught errors
     if (error.response) {
-      const apiStore = useApiStore()
-      const { loading } = storeToRefs(apiStore)
-      error.response.ok = false
-      // Set unAuthenticated state
       const { handleErrorResponse } = useApiStore()
       handleErrorResponse(error)
-      loading.value = false
+      error.response.ok = false
     }
     return Promise.reject(error)
   },

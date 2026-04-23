@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseIcon from '../shared/BaseIcon.vue'
+import IconLoader from '../shared/IconLoader.vue'
 import { TimeSlot } from '@/types'
 const props = defineProps<{ availableIds: number[]; options: TimeSlot[] }>()
 
@@ -32,22 +32,15 @@ function convertTo12Hour(time24: string): string {
 }
 </script>
 <template>
-  <div class="w-full flex flex-row justify-between gap-1.5">
+  <div class="w-full grid grid-cols-3 justify-between gap-1.5">
     <label v-for="option in options" :key="option.id" class="grow cursor-pointer">
-      <input
-        type="radio"
-        :value="option.id"
-        v-model="model"
-        class="peer hidden"
-        :disabled="!available(option.id)"
-      />
+      <input type="radio" :value="option.id" v-model="model" class="peer hidden" :disabled="!available(option.id)" />
       <div
-        class="p-3.75 aspect-163/61 flex-1 flex items-center justify-center gap-1 border border-grayscale-200 bg-grayscale-50 rounded-xl text-grayscale-800 peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500 peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500 peer-disabled:border-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:cursor-not-allowed transform duration-500 transition-all ease-in-out"
-      >
-        <BaseIcon v-if="option.icon" :name="option.icon" class="w-6.5 h-6.5" />
+        class="p-3.75 aspect-163/61 flex-1 flex items-center justify-center gap-3 border border-grayscale-200 bg-grayscale-50 rounded-xl text-grayscale-500 peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500 peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500 peer-disabled:text-grayscale-200 peer-disabled:border-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:cursor-not-allowed transform duration-500 transition-all ease-in-out">
+        <IconLoader v-if="option.icon" :name="option.icon" class="text-[26px] " />
         <div class="flex flex-col gap-1 text-nowrap">
-          <h5 class="block font-semibold" v-text="parseTimeLable(option.label)" />
-          <small v-text="parseTimeSlotLabel(option.startTime, option.endTime)" />
+          <h5 class="block text-body-xs" v-text="parseTimeLable(option.label)" />
+          <span class="text-helper-regular-xs" v-text="parseTimeSlotLabel(option.startTime, option.endTime)" />
         </div>
       </div>
     </label>

@@ -21,7 +21,7 @@ const statusColor = {
 
 <template>
   <div class="relative inline-block w-14 h-14">
-    <AvatarBase v-if="!avatar" class="w-full h-full" />
+    <AvatarBase v-if="!avatar" class="w-full h-full " />
     <div v-else class="circle-container">
       <img :src="avatar" alt="preview" />
     </div>

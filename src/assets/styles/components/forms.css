@@ -1,6 +1,6 @@
 @layer components {
   form.modal {
-    @apply flex flex-col gap-6;
+    @apply flex flex-col gap-3;
   }
 
   .custom-radio {
@@ -12,12 +12,18 @@
 
     /* Transitions */
     @apply transition-all duration-500 ease-in-out transform;
-
+    .price-label {
+      @apply text-purple-400;
+    }
     /* Interaction States (Checked & Hover) */
     @apply peer-checked:bg-purple-100 peer-checked:border-purple-300 peer-checked:text-purple-500;
     @apply peer-enabled:hover:bg-purple-100 peer-enabled:hover:border-purple-300 peer-enabled:hover:text-purple-500;
 
     /* Disabled State */
-    @apply peer-disabled:bg-grayscale-100 peer-disabled:border-grayscale-200 peer-disabled:cursor-not-allowed;
+    @apply peer-disabled:text-grayscale-200 peer-disabled:bg-grayscale-100 peer-disabled:border-grayscale-200 peer-disabled:cursor-not-allowed;
+  }
+
+  .peer:disabled ~ .custom-radio .price-label {
+    @apply text-grayscale-200;
   }
 }

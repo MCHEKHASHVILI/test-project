@@ -11,7 +11,6 @@ export const useProfileStore = defineStore('profile', () => {
   const mobileNumber = ref<string | null>(null)
   const age = ref<number | null>(null)
   const avatar = ref<File | null>(null)
-  const validationErrors = ref()
 
   const authStore = useAuthStore()
   const { user } = storeToRefs(authStore)
@@ -77,9 +76,7 @@ export const useProfileStore = defineStore('profile', () => {
     try {
       const response = await apiClient.put('profile', formData, {
         headers: {
-          accept: 'application/json',
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${authStore.token}`,
         },
       })
       if (!response.ok) {
@@ -96,13 +93,7 @@ export const useProfileStore = defineStore('profile', () => {
       return true
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const status = error.response?.status
-        const message = error.response?.data?.message || error.message
-        if (status === 422) {
-          validationErrors.value = error.response?.data?.errors
-          return false
-        }
-        console.error(`API Error (${status}): ${message}`)
+        console.error('API Error Occured:', error)
       } else {
         console.error('An unexpected error occurred:', error)
       }
@@ -124,6 +115,5 @@ export const useProfileStore = defineStore('profile', () => {
     fetchProfile,
     updateProfile,
     ageOptions,
-    validationErrors,
   }
 })

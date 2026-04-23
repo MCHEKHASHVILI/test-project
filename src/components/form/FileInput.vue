@@ -98,17 +98,8 @@ watch(
 
     <div class="pond-wrapper">
       <!-- Show FilePond only if no file is uploaded -->
-      <file-pond
-        v-show="!uploadedFile"
-        ref="pond"
-        v-bind="$attrs"
-        :credits="[]"
-        label-idle=""
-        @init="handlePondInit"
-        @addfile="handleFileAdded"
-        @removefile="handleFileRemoved"
-        @updatefiles="handleUpdateFiles"
-      />
+      <file-pond v-show="!uploadedFile" ref="pond" v-bind="$attrs" :credits="[]" label-idle="" @init="handlePondInit"
+        @addfile="handleFileAdded" @removefile="handleFileRemoved" @updatefiles="handleUpdateFiles" />
 
       <!-- Custom Circle Preview (Inside the same wrapper) -->
       <div v-if="uploadedFile" class="custom-circle-view">
@@ -155,21 +146,21 @@ watch(
   border-radius: 12px;
 }
 
-:deep(.filepond--drop-label) {
-  min-height: 140px;
-  padding: 30px;
-}
-
-:deep(.filepond--drop-label):hover {
+:deep(.filepond--panel-label):hover {
   background: var(--color-purple-50);
   border: 1.5px solid var(--purple-100);
   border-radius: 8px;
 }
 
-:deep(.filepond--drop-label):active {
+:deep(.filepond--panel-label):active {
   background: var(--color-purple-100);
   border: 1.5px solid var(--purple-200);
   border-radius: 8px;
+}
+
+:deep(.filepond--drop-label) {
+  min-height: 140px;
+  padding: 30px;
 }
 
 /* New Circle Preview Styles */

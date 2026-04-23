@@ -142,6 +142,8 @@ export const useCoursesStore = defineStore('courses', () => {
     scheduleId.value = null
     timeSlotId.value = null
     sessionTypeId.value = null
+    timeSlots.value = []
+    sessionTypes.value = []
     try {
       const response = await apiClient.get(`/courses/${route.params.id}/weekly-schedules`, {
         requiresAuth: false,
@@ -159,6 +161,7 @@ export const useCoursesStore = defineStore('courses', () => {
     // reset models
     timeSlotId.value = null
     sessionTypeId.value = null
+    sessionTypes.value = []
     try {
       const response = await apiClient.get(`/courses/${route.params.id}/time-slots`, {
         params: {
@@ -226,19 +229,6 @@ export const useCoursesStore = defineStore('courses', () => {
         default:
           return Promise.reject(new Error(getMessage.value))
       }
-
-      // if (axios.isAxiosError(error)) {
-      // const status = error.response?.status
-      // const message = error.response?.data?.message || error.message
-      // if (status === 409) {
-      // enrollmentConflicts.value = error.response?.data?.conflicts[0]
-      // router.push({ name: 'action.modal', params: { name: 'EnrollmentConflictModal' } })
-      // return Promise.reject(new Error(message))
-      // }
-      // console.error(`API Error (${status}): ${message}`)
-      // } else {
-      // console.error('An unexpected error occurred:', error)
-      // }
     }
   }
 

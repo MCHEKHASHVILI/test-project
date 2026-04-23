@@ -10,7 +10,7 @@ export const timeSlotOptions = ref<TimeSlot[]>([
     // localLabel: '9:00 AM – 12:00 PM',
     startTime: '09:00:00',
     endTime: '12:00:00',
-    icon: 'bug',
+    icon: 'cloud_sun',
   },
   {
     id: 2,

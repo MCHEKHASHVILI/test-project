@@ -12,18 +12,33 @@ export const useApiStore = defineStore('api', () => {
   // State
   const loading = ref<boolean>(false)
   const errors = ref()
+  const conflicts = ref()
   const status = ref<number>()
   const message = ref<string>()
   // Actions
   function handleErrorResponse(errorResponse: ErrorResponse) {
     status.value = errorResponse.response.status
     message.value = errorResponse?.message || errorResponse.response?.message
-    errors.value = errorResponse.response?.errors
+    errors.value =
+      errorResponse?.errors ||
+      errorResponse.response?.errors ||
+      errorResponse.response?.data?.errors
+    conflicts.value = errorResponse.response?.conflicts || errorResponse.response?.data?.conflicts
+    // turn off loading
+    loading.value = false
+    // Handle unauthorized and 500 server errors (just closing modals)
+    if (getStatus.value === 401 || getStatus.value === 500) modalStore.closeModal()
+  }
 
-    if (getStatus.value === 401) modalStore.closeModal()
+  function reset(statusCode: number) {
+    loading.value = false
+    errors.value = []
+    status.value = statusCode
+    message.value = ''
   }
   // Getters
   const getErrors = computed(() => errors.value)
+  const getConflicts = computed(() => conflicts.value[0])
   const getStatus = computed(() => status.value)
   const getMessage = computed(() => message.value)
   const isLoading = computed(() => loading.value)
@@ -32,7 +47,9 @@ export const useApiStore = defineStore('api', () => {
     loading,
     errors,
     handleErrorResponse,
+    reset,
     getErrors,
+    getConflicts,
     getStatus,
     getMessage,
     isLoading,
