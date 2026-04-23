@@ -1,0 +1,1 @@
+import{M as e,g as t,p as n}from"./vue.runtime.esm-bundler-BTwqgr2Q.js";var r={xmlns:`http://www.w3.org/2000/svg`,width:`24`,height:`24`,fill:`none`};function i(i,a){return e(),t(`svg`,r,[...a[0]||=[n(`path`,{fill:`#DDDBFA`,stroke:`#281ED2`,d:`M11.999 4.5a7.51 7.51 0 0 1 7.491 7.129l.01.372A7.5 7.5 0 1 1 11.999 4.5Z`},null,-1)]])}var a={render:i};export{a as default,i as render};
