@@ -30,7 +30,7 @@ const routes = [
             path: ':id',
             name: 'details',
             component: Details,
-            meta: { breadcrumb: 'Development' },
+            meta: { breadcrumb: 'coursesStore.getCourseDetailed.category.name' },
           },
         ],
       },
