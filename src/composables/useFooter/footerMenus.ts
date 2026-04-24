@@ -58,7 +58,7 @@ const footerMenus = [
       {
         title: '(+995) 555 111 222',
         url: 'tel:+995555111222',
-        icon: 'phone',
+        icon: 'Phone',
         authRequired: false,
         guestRequired: false,
       },
